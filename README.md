@@ -2,12 +2,12 @@
 Welcome to our project from web application optimization
 
 ## Members ✒️
-| <a href="https://github.com/JimmyOjeda">![jimmy](https://github.com/plupyt/IHC-proy/blob/main/public/assets/jimmy_profile.jpeg)</a> | <a href="https://github.com/plupyt">![daniel](https://github.com/plupyt/IHC-proy/blob/main/public/assets/daniel_profile.jpg)</a> |
+| <a href="https://github.com/JimmyOjeda">![jimmy](https://github.com/plupyt/Opt_apps_web-proy/blob/main/public/assets/jimmy_profile.jpeg)</a> | <a href="https://github.com/plupyt">![daniel](https://github.com/plupyt/Opt_apps_web-proy/blob/main/public/assets/daniel_profile.jpg)</a> | <a href="">![jorge]()</a>
 | ----- | ----- |
 
+* Jorge A. Chi León
 * Jimmy N. Ojeda Arana
 * Daniel J. Pérez Ayuso
-* Jorge A. Chi León
 
 ## License 📄
 
