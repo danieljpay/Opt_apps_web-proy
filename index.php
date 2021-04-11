@@ -2,6 +2,25 @@
 <html lang="en">
 
 <?php 
+
+include ("variables.php");
+
+include ("funciones.php");
+
+global $servidor, $usuario, $contrasena, $basedatos;
+
+//Obtener las tablas de la base de datos
+
+$sentenciaSQL = "SELECT * FROM `canales`";
+$registroCanales = ConsultarSQL($servidor, $usuario, $contrasena, $basedatos, $sentenciaSQL);
+$contadorCanales = count($registroCanales);
+
+$sentenciaSQL = "SELECT * FROM `items`";
+$registroItems = ConsultarSQL($servidor, $usuario, $contrasena, $basedatos, $sentenciaSQL);
+$contadorItems = count($registroItems);
+
+//Fin de obtener las tablas de la base de datos
+
   if (isset($_POST['submit']) && $_POST['RSSUrl'] != '') {
     $RSSUrl = $_POST['RSSUrl'];
     $feeds = loadXML($RSSUrl);
@@ -11,6 +30,35 @@
       $siteLink = $feeds->channel->link;
       $siteImg = $feeds->channel->image->url;
     }
+    
+    //Insertar canal a la base de datos
+    
+    $canalRepetido = false;
+    
+    for ($j = 0; $j < $contadorCanales; $j++){
+        if($registroCanales[$j]["NombreCanal"] == $siteTitle){
+            $canalRepetido = true;
+            break;
+        }
+    }
+    
+    if(!$canalRepetido){
+        $conexion = mysqli_connect($servidor, $usuario, $contrasena, $basedatos);
+        if (! $conexion) {
+            die("Connection failed: " . mysqli_connect_error());
+        }
+        $sentenciaSQL = "INSERT INTO `canales` (`IdCanal`, `URL`, `NombreCanal`, `SiteImg`)
+     VALUES (NULL, '" . $siteLink . "', '" . $siteTitle . "', '" . $siteImg . "')";
+        if (mysqli_query($conexion, $sentenciaSQL)) {
+        } else {
+            echo "Error: " . $sentenciaSQL . "<br>" . mysqli_error($conexion);
+        }
+        
+        mysqli_close($conexion);
+    }
+    
+    //Fin de insertar canal en la base de datos
+    
   }
 
   function loadXML ($RSSUrl){
@@ -113,15 +161,12 @@
     <!-- Urls Input -->
     <div class="container">
       <p class="text-center"><strong>Ingresa la Url de donde desees recibir sus actualizaciones:</strong></p>
-      <div class="input-group mb-3">
         <form method='post' action='' class="input-group-append">
-          <input type="text" name="RSSUrl" class="form-control" placeholder="http://feeds.bbci.co.uk/news/world/rss.xml" aria-label="Recipient's username" aria-describedby="button-addon2">
-          <input type="submit" name="submit"  value="Ingresar" class="btn btn-outline-primary">
-          <!-- <div class="input-group-append">
-            <button class="btn btn-outline-primary" type="button" id="button-addon2">Ingresar</button>
-          </div> -->
+          <div class="input-group mb-3">
+            <input type="text" name="RSSUrl" class="form-control" placeholder="http://feeds.bbci.co.uk/news/world/rss.xml" aria-label="Recipient's username" aria-describedby="button-addon2">
+            <input type="submit" name="submit"  value="Ingresar" class="btn btn-outline-primary">
+          </div>
         </form>
-      </div>
     </div>
     
 
@@ -129,6 +174,11 @@
     <div class="row text-center" id="ItemsContainer">
 
       <?php
+      
+      $sentenciaSQL = "SELECT * FROM `canales`";
+      $registroCanales = ConsultarSQL($servidor, $usuario, $contrasena, $basedatos, $sentenciaSQL);
+      $contadorCanales = count($registroCanales);
+      
         if (isset($_POST['submit'])){
           $counter = 0;
           foreach ($feeds->channel->item as $item) {
@@ -136,12 +186,51 @@
             $itemLink = $item->link;
             $itemDescription = $item->description;
             $itemCategories = $item->category;
-            $itemDate = date('D, d M Y' ,strtotime($item->pubDate));
+            $itemDate = date("Y-m-d", strtotime($item->pubDate));
+         
+            //Insertar noticia a la base de datos
+            
+            $noticiaRepetida = false;
+            
+            for ($j = 0; $j < $contadorItems; $j++){
+                if($registroItems[$j]["Titulo"] == $itemTitle){
+                    $noticiaRepetida = true;
+                    break;
+                }
+            }
+            
+            if(!$noticiaRepetida){
+                
+                for ($j = 0; $j < $contadorCanales; $j++){
+                    if($registroCanales[$j]["NombreCanal"] == $siteTitle){
+                        $idCanal = $registroCanales[$j]["IdCanal"];
+                        break;
+                    }
+                }
+                
+                $conexion = mysqli_connect($servidor, $usuario, $contrasena, $basedatos);
+                if (! $conexion) {
+                    die("Connection failed: " . mysqli_connect_error());
+                }
+                $sentenciaSQL = "INSERT INTO `items` (`IdNoticia`, `IdCanal`, `Titulo`, `itemLink`, `Descripcion`, `Fecha`)
+     VALUES (NULL, '" . $idCanal . "', '" . $itemTitle . "', '" . $itemLink . "' , '" . $itemDescription . "' , '" . $itemDate . "')";
+                if (mysqli_query($conexion, $sentenciaSQL)) {
+                } else {
+                    echo "Error: " . $sentenciaSQL . "<br>" . mysqli_error($conexion);
+                }
+                
+                mysqli_close($conexion);
+            }
+            
+            //Fin de insertar canal en la base de datos
+            
+            
             generateItem($siteImg,$itemTitle,$itemLink,$itemDescription,$itemCategories,$itemDate);
             if ($counter >= 3) {
               break;
             }
             $counter ++;
+            
           }
         }
         
