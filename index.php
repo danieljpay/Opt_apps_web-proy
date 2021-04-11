@@ -113,15 +113,12 @@
     <!-- Urls Input -->
     <div class="container">
       <p class="text-center"><strong>Ingresa la Url de donde desees recibir sus actualizaciones:</strong></p>
-      <div class="input-group mb-3">
         <form method='post' action='' class="input-group-append">
-          <input type="text" name="RSSUrl" class="form-control" placeholder="http://feeds.bbci.co.uk/news/world/rss.xml" aria-label="Recipient's username" aria-describedby="button-addon2">
-          <input type="submit" name="submit"  value="Ingresar" class="btn btn-outline-primary">
-          <!-- <div class="input-group-append">
-            <button class="btn btn-outline-primary" type="button" id="button-addon2">Ingresar</button>
-          </div> -->
+          <div class="input-group mb-3">
+            <input type="text" name="RSSUrl" class="form-control" placeholder="http://feeds.bbci.co.uk/news/world/rss.xml" aria-label="Recipient's username" aria-describedby="button-addon2">
+            <input type="submit" name="submit"  value="Ingresar" class="btn btn-outline-primary">
+          </div>
         </form>
-      </div>
     </div>
     
 
