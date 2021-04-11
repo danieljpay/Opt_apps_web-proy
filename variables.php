@@ -2,7 +2,7 @@
 
 $servidor = "localhost";
 $usuario = "root";
-$contrasena = "ilovemilia";
+$contrasena = "";
 $basedatos = "noticias_opt";
 
 ?>

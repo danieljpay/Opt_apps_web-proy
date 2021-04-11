@@ -204,7 +204,7 @@ function generateItem($siteImg, $itemTitle, $itemLink, $itemDescription, $itemCa
             }
 
             if (!$noticiaRepetida) {
-
+                $idCanal = 0;
                 for ($j = 0; $j < $contadorCanales; $j ++) {
                     if ($registroCanales[$j]["NombreCanal"] == $siteTitle) {
                         $idCanal = $registroCanales[$j]["IdCanal"];
@@ -331,29 +331,30 @@ function generateItem($siteImg, $itemTitle, $itemLink, $itemDescription, $itemCa
             // Fin de recarga
             
             // Crear los obejtos de notcias
-            
+            $imagenItem = "";
             for ($j = 0; $j < $contadorItems; $j ++) {
-                $arrayCategories = array("");
-                for ($i = 0; $i < $contadorCanales; $i ++) {
-                    if ($registroCanales[$i]["IdCanal"] == $registroItems[$j]["IdCanal"]) {
-                        $imagenItem = $registroCanales[$i]["SiteImg"];
-                        break;
-                    }
+              $arrayCategories = array("");
+              for ($i = 0; $i < $contadorCanales; $i ++) {
+                if ($registroCanales[$i]["IdCanal"] == $registroItems[$j]["IdCanal"]) {
+                  
+                  $imagenItem = $registroCanales[$i]["SiteImg"];
+                  break;
                 }
+              }
                 
-                for ($i = 0; $i < $contadorCategorizacion; $i ++) {
-                    if ($registroCategorizacion[$i]["IdNoticia"] == $registroItems[$j]["IdNoticia"]) {
-                        for ($f = 0; $f < $contadorCategorias; $f ++) {
-                            if ($registroCategorias[$f]["IdCategoria"] == $registroCategorizacion[$i]["IdCategoria"]) {
-                                $categoriaActual = $registroCategorias[$f]["NombreCategoria"];
-                                array_push($arrayCategories, $categoriaActual);
-                                break;
-                            }
-                        }
-                    }
-                }
-                generateItem($imagenItem, $registroItems[$j]["Titulo"], $registroItems[$j]["itemLink"], $registroItems[$j]["Descripcion"], $arrayCategories, $registroItems[$j]["Fecha"]);
-            }
+              for ($i = 0; $i < $contadorCategorizacion; $i ++) {
+                  if ($registroCategorizacion[$i]["IdNoticia"] == $registroItems[$j]["IdNoticia"]) {
+                      for ($f = 0; $f < $contadorCategorias; $f ++) {
+                          if ($registroCategorias[$f]["IdCategoria"] == $registroCategorizacion[$i]["IdCategoria"]) {
+                              $categoriaActual = $registroCategorias[$f]["NombreCategoria"];
+                              array_push($arrayCategories, $categoriaActual);
+                              break;
+                          }
+                      }
+                  }
+              }
+              generateItem($imagenItem, $registroItems[$j]["Titulo"], $registroItems[$j]["itemLink"], $registroItems[$j]["Descripcion"], $arrayCategories, $registroItems[$j]["Fecha"]);
+          }
         } else {
             print "Fuente de noticias no soportada.";
         }
