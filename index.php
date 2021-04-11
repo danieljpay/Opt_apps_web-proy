@@ -129,19 +129,22 @@
     <div class="row text-center" id="ItemsContainer">
 
       <?php
-        $counter = 0;
-        foreach ($feeds->channel->item as $item) {
-          $itemTitle = $item->title;
-          $itemLink = $item->link;
-          $itemDescription = $item->description;
-          $itemCategories = $item->category;
-          $itemDate = date('D, d M Y' ,strtotime($item->pubDate));
-          generateItem($siteImg,$itemTitle,$itemLink,$itemDescription,$itemCategories,$itemDate);
-          if ($counter >= 3) {
-            break;
+        if (isset($_POST['submit'])){
+          $counter = 0;
+          foreach ($feeds->channel->item as $item) {
+            $itemTitle = $item->title;
+            $itemLink = $item->link;
+            $itemDescription = $item->description;
+            $itemCategories = $item->category;
+            $itemDate = date('D, d M Y' ,strtotime($item->pubDate));
+            generateItem($siteImg,$itemTitle,$itemLink,$itemDescription,$itemCategories,$itemDate);
+            if ($counter >= 3) {
+              break;
+            }
+            $counter ++;
           }
-          $counter ++;
         }
+        
       ?>
 
     </div>
