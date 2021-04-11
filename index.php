@@ -10,13 +10,14 @@ global $servidor, $usuario, $contrasena, $basedatos;
 
 // Obtener las tablas de la base de datos
 
-$sentenciaSQL = "SELECT * FROM `canales`";
-$registroCanales = ConsultarSQL($servidor, $usuario, $contrasena, $basedatos, $sentenciaSQL);
+$registroCanales = ReadChannels($servidor, $usuario, $contrasena, $basedatos);
 $contadorCanales = count($registroCanales);
 
-$sentenciaSQL = "SELECT * FROM `items`";
-$registroItems = ConsultarSQL($servidor, $usuario, $contrasena, $basedatos, $sentenciaSQL);
+$registroItems = ReadItems ($servidor, $usuario, $contrasena, $basedatos);
 $contadorItems = count($registroItems);
+
+$registroCategorias = ReadCategories ($servidor, $usuario, $contrasena, $basedatos);
+$contadorCategorias = count($registroCategorias);
 
 //echo $registroItems[1]["Titulo"];
 /*
@@ -29,9 +30,7 @@ $contadorItems = count($registroItems);
     $contador = count($registros);
  */
 
-$sentenciaSQL = "SELECT * FROM `categorias`";
-$registroCategorias = ConsultarSQL($servidor, $usuario, $contrasena, $basedatos, $sentenciaSQL);
-$contadorCategorias = count($registroCategorias);
+
 
 // Fin de obtener las tablas de la base de datos
 
@@ -73,28 +72,7 @@ if (isset($_POST['submit']) && $_POST['RSSUrl'] != '') {
     // Fin de insertar canal en la base de datos
 }
 
-function loadXML($RSSUrl)
-{
-    if (@simplexml_load_file($RSSUrl)) {
-        $feeds = simplexml_load_file($RSSUrl);
-    } else {
-        $feeds = null;
-        echo "Invalid RSS URL";
-    }
-    return $feeds;
-}
 
-function generateItem($siteImg, $itemTitle, $itemLink, $itemDescription, $itemCategories, $itemDate)
-{
-    $categoryList = "";
-    foreach ($itemCategories as $category) {
-        $categoryList .= $category . "<hr>";
-    }
-
-    $itemHTML = '<div class="col-lg-3 col-md-6 mb-4">' . '<div class="card h-100">' . '<img class="card-img-top" src="' . $siteImg . '" alt="">' . '<div class="card-body">' . '<h4 class="card-title">' . $itemTitle . '</h4>' . '<p class="card-text">' . $itemDescription . '</p>' . '</div>' . '<div class="card-text">' . $itemDate . '</div>' . '<div class="card-text">' . '<a href="">' . $itemLink . '</a>' . '</div>' . '<div class="card-footer">' . 'Categorías <h6><hr/>' . $categoryList . '</h6>' . '</div>' . '<div class="card-footer">' . '<a href="#" class="btn btn-primary">Ver actualizaciones</a>' . '</div>' . '</div>' . '</div>';
-
-    echo $itemHTML;
-}
 
 ?>
 
@@ -171,196 +149,9 @@ function generateItem($siteImg, $itemTitle, $itemLink, $itemDescription, $itemCa
 		<!-- Page Features -->
 		<div class="row text-center" id="ItemsContainer">
 
-      <?php
+    <?php
 
-    // Se cargan nuevamente los canales por si se agrego uno nuevo
-
-    $sentenciaSQL = "SELECT * FROM `canales`";
-    $registroCanales = ConsultarSQL($servidor, $usuario, $contrasena, $basedatos, $sentenciaSQL);
-    $contadorCanales = count($registroCanales);
-
-    // Fin de recarga
-
-    $insercionFallida = false;
-    if (isset($_POST['submit'])) {
-        $counter = 0;
-        foreach ($feeds->channel->item as $item) {
-            $itemTitle = $item->title;
-            $itemLink = $item->link;
-            $itemDescription = filter_var ( $item->description, FILTER_SANITIZE_STRING);
-            $itemCategories = $item->category;
-            $itemDate = date("Y-m-d", strtotime($item->pubDate));
-
-            // Insertar noticia a la base de datos
-
-            $noticiaRepetida = false;
-            $categoriaRepetida = false;
-
-            for ($j = 0; $j < $contadorItems; $j ++) {
-                if ($registroItems[$j]["Titulo"] == $itemTitle) {
-                    $noticiaRepetida = true;
-                    break;
-                }
-            }
-
-            if (!$noticiaRepetida) {
-                $idCanal = 0;
-                for ($j = 0; $j < $contadorCanales; $j ++) {
-                    if ($registroCanales[$j]["NombreCanal"] == $siteTitle) {
-                        $idCanal = $registroCanales[$j]["IdCanal"];
-                        break;
-                    }
-                }
-
-                $conexion = mysqli_connect($servidor, $usuario, $contrasena, $basedatos);
-                if (! $conexion) {
-                    die("Connection failed: " . mysqli_connect_error());
-                }
-                $sentenciaSQL = "INSERT INTO `items` (`IdNoticia`, `IdCanal`, `Titulo`, `itemLink`, `Descripcion`, `Fecha`)
-     VALUES (NULL, '" . $idCanal . "', '" . $itemTitle . "', '" . $itemLink . "' , '" . $itemDescription . "' , '" . $itemDate . "')";
-                if (mysqli_query($conexion, $sentenciaSQL)) {} else {
-                    $insercionFallida = true;
-                    // echo "Error: " . $sentenciaSQL . "<br>" . mysqli_error($conexion); Si sale algun error aleatorio en la insercion, se deja esta bandera para el manejo de error
-                }
-
-                mysqli_close($conexion);
-                
-                // Lo de categorias
-                
-                foreach ($itemCategories as $category) {
-                    for ($j = 0; $j < $contadorCategorias; $j ++) {
-                        if ($registroCategorias[$j]["NombreCategoria"] == $category) {
-                            $categoriaRepetida = true;
-                            break;
-                        }
-                    }
-                    if(!$categoriaRepetida){
-                        // Insertar categoria a la base de datos
-                        
-                        $conexion = mysqli_connect($servidor, $usuario, $contrasena, $basedatos);
-                        if (! $conexion) {
-                            die("Connection failed: " . mysqli_connect_error());
-                        }
-                        $sentenciaSQL = "INSERT INTO `categorias` (`IdCategoria`, `NombreCategoria`)
-                                          VALUES (NULL, '" . $category . "')";
-                        if (mysqli_query($conexion, $sentenciaSQL)) {} else {
-                            // echo "Error: " . $sentenciaSQL . "<br>" . mysqli_error($conexion); Si sale algun error aleatorio en la insercion, se deja esta bandera para el manejo de error
-                        }
-                        
-                        mysqli_close($conexion);
-                        
-                        // Fin de insertar categoria
-                    }
-                    $categoriaRepetida = false;
-                }
-                
-                // Relacionar categorias con noticias
-                
-                // Se cargan nuevamente las noticias y categorias por si se agrego una nueva
-                
-                $sentenciaSQL = "SELECT * FROM `items`";
-                $registroItems = ConsultarSQL($servidor, $usuario, $contrasena, $basedatos, $sentenciaSQL);
-                $contadorItems = count($registroItems);
-                
-                $sentenciaSQL = "SELECT * FROM `categorias`";
-                $registroCategorias = ConsultarSQL($servidor, $usuario, $contrasena, $basedatos, $sentenciaSQL);
-                $contadorCategorias = count($registroCategorias);
-                
-                // Fin de recarga
-                $idNoticia = 0;
-                for ($j = 0; $j < $contadorItems; $j ++) {
-                    if ($registroItems[$j]["Titulo"] == $itemTitle) {
-                        $idNoticia = $registroItems[$j]["IdNoticia"];
-                        break;
-                    }
-                }
-                
-                foreach ($itemCategories as $category) {
-                    for ($j = 0; $j < $contadorCategorias; $j ++) {
-                        if ($registroCategorias[$j]["NombreCategoria"] == $category) {
-                            $idCategoria = $registroCategorias[$j]["IdCategoria"];
-                            // Insertar relacion a la base de datos
-                            
-                            $conexion = mysqli_connect($servidor, $usuario, $contrasena, $basedatos);
-                            if (! $conexion) {
-                                die("Connection failed: " . mysqli_connect_error());
-                            }
-                            $sentenciaSQL = "INSERT INTO `categorizacion` (`IdRelacion`,`IdNoticia`, `IdCategoria`)
-                                          VALUES (NULL,'" . $idNoticia . "', '" . $idCategoria . "')";
-                            if (mysqli_query($conexion, $sentenciaSQL)) {} else {
-                                // echo "Error: " . $sentenciaSQL . "<br>" . mysqli_error($conexion); Si sale algun error aleatorio en la insercion, se deja esta bandera para el manejo de error
-                            }
-                            
-                            mysqli_close($conexion);
-                            
-                            // Fin de insertar relacion
-                            break;
-                        }
-                    }
-                }
-                
-                // Fin de relacionar
-                
-                // Fin de lo de categorias
-            }
-
-            // Fin de insertar noticia en la base de datos
-
-            if ($counter >= 3) {
-                break;
-            }
-            $counter ++;
-        }
-
-        if (! $insercionFallida) {
-            
-            // Se cargan nuevamente las noticias y categorizacion por si se agrego una nueva
-            
-            $sentenciaSQL = "SELECT * FROM `items` ORDER BY Fecha DESC";
-            $registroItems = ConsultarSQL($servidor, $usuario, $contrasena, $basedatos, $sentenciaSQL);
-            $contadorItems = count($registroItems);
-            
-            $sentenciaSQL = "SELECT * FROM `categorizacion`";
-            $registroCategorizacion = ConsultarSQL($servidor, $usuario, $contrasena, $basedatos, $sentenciaSQL);
-            $contadorCategorizacion = count($registroCategorizacion);
-            
-            $sentenciaSQL = "SELECT * FROM `categorias`";
-            $registroCategorias = ConsultarSQL($servidor, $usuario, $contrasena, $basedatos, $sentenciaSQL);
-            $contadorCategorias = count($registroCategorias);
-            
-            // Fin de recarga
-            
-            // Crear los obejtos de notcias
-            $imagenItem = "";
-            for ($j = 0; $j < $contadorItems; $j ++) {
-              $arrayCategories = array("");
-              for ($i = 0; $i < $contadorCanales; $i ++) {
-                if ($registroCanales[$i]["IdCanal"] == $registroItems[$j]["IdCanal"]) {
-                  
-                  $imagenItem = $registroCanales[$i]["SiteImg"];
-                  break;
-                }
-              }
-                
-              for ($i = 0; $i < $contadorCategorizacion; $i ++) {
-                  if ($registroCategorizacion[$i]["IdNoticia"] == $registroItems[$j]["IdNoticia"]) {
-                      for ($f = 0; $f < $contadorCategorias; $f ++) {
-                          if ($registroCategorias[$f]["IdCategoria"] == $registroCategorizacion[$i]["IdCategoria"]) {
-                              $categoriaActual = $registroCategorias[$f]["NombreCategoria"];
-                              array_push($arrayCategories, $categoriaActual);
-                              break;
-                          }
-                      }
-                  }
-              }
-              generateItem($imagenItem, $registroItems[$j]["Titulo"], $registroItems[$j]["itemLink"], $registroItems[$j]["Descripcion"], $arrayCategories, $registroItems[$j]["Fecha"]);
-          }
-        } else {
-            print "Fuente de noticias no soportada.";
-        }
-    }
-
-    // Fin de generar los objetos de noticias
+      include("CargaBD.php");
 
     ?>
 
