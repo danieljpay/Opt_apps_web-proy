@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 11-04-2021 a las 00:44:17
+-- Tiempo de generación: 11-04-2021 a las 17:30:36
 -- Versión del servidor: 10.4.14-MariaDB
 -- Versión de PHP: 7.4.10
 
@@ -30,7 +30,8 @@ SET time_zone = "+00:00";
 CREATE TABLE `canales` (
   `IdCanal` int(11) NOT NULL,
   `URL` text NOT NULL,
-  `NombreCanal` text NOT NULL
+  `NombreCanal` text NOT NULL,
+  `SiteImg` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -51,6 +52,7 @@ CREATE TABLE `categorias` (
 --
 
 CREATE TABLE `categorizacion` (
+  `IdRelacion` int(11) NOT NULL,
   `IdNoticia` int(11) NOT NULL,
   `IdCategoria` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -65,9 +67,9 @@ CREATE TABLE `items` (
   `IdNoticia` int(11) NOT NULL,
   `IdCanal` int(11) NOT NULL,
   `Titulo` text NOT NULL,
+  `itemLink` text NOT NULL,
   `Descripcion` text NOT NULL,
-  `Fecha` date NOT NULL,
-  `IdCategoria` int(11) NOT NULL
+  `Fecha` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -87,6 +89,12 @@ ALTER TABLE `categorias`
   ADD PRIMARY KEY (`IdCategoria`);
 
 --
+-- Indices de la tabla `categorizacion`
+--
+ALTER TABLE `categorizacion`
+  ADD PRIMARY KEY (`IdRelacion`);
+
+--
 -- Indices de la tabla `items`
 --
 ALTER TABLE `items`
@@ -100,19 +108,25 @@ ALTER TABLE `items`
 -- AUTO_INCREMENT de la tabla `canales`
 --
 ALTER TABLE `canales`
-  MODIFY `IdCanal` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `IdCanal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `categorias`
 --
 ALTER TABLE `categorias`
-  MODIFY `IdCategoria` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `IdCategoria` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+
+--
+-- AUTO_INCREMENT de la tabla `categorizacion`
+--
+ALTER TABLE `categorizacion`
+  MODIFY `IdRelacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT de la tabla `items`
 --
 ALTER TABLE `items`
-  MODIFY `IdNoticia` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `IdNoticia` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=87;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

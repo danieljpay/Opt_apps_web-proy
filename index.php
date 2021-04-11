@@ -213,11 +213,87 @@ function generateItem($siteImg, $itemTitle, $itemLink, $itemDescription, $itemCa
                 }
 
                 mysqli_close($conexion);
+                
+                // Lo de categorias
+                
+                foreach ($itemCategories as $category) {
+                    for ($j = 0; $j < $contadorCategorias; $j ++) {
+                        if ($registroCategorias[$j]["NombreCategoria"] == $category) {
+                            $categoriaRepetida = true;
+                            break;
+                        }
+                    }
+                    if(!$categoriaRepetida){
+                        // Insertar categoria a la base de datos
+                        
+                        $conexion = mysqli_connect($servidor, $usuario, $contrasena, $basedatos);
+                        if (! $conexion) {
+                            die("Connection failed: " . mysqli_connect_error());
+                        }
+                        $sentenciaSQL = "INSERT INTO `categorias` (`IdCategoria`, `NombreCategoria`)
+                                          VALUES (NULL, '" . $category . "')";
+                        if (mysqli_query($conexion, $sentenciaSQL)) {} else {
+                            // echo "Error: " . $sentenciaSQL . "<br>" . mysqli_error($conexion); Si sale algun error aleatorio en la insercion, se deja esta bandera para el manejo de error
+                        }
+                        
+                        mysqli_close($conexion);
+                        
+                        // Fin de insertar categoria
+                    }
+                    $categoriaRepetida = false;
+                }
+                
+                // Relacionar categorias con noticias
+                
+                // Se cargan nuevamente las noticias y categorias por si se agrego una nueva
+                
+                $sentenciaSQL = "SELECT * FROM `items`";
+                $registroItems = ConsultarSQL($servidor, $usuario, $contrasena, $basedatos, $sentenciaSQL);
+                $contadorItems = count($registroItems);
+                
+                $sentenciaSQL = "SELECT * FROM `categorias`";
+                $registroCategorias = ConsultarSQL($servidor, $usuario, $contrasena, $basedatos, $sentenciaSQL);
+                $contadorCategorias = count($registroCategorias);
+                
+                // Fin de recarga
+                $idNoticia = 0;
+                for ($j = 0; $j < $contadorItems; $j ++) {
+                    if ($registroItems[$j]["Titulo"] == $itemTitle) {
+                        $idNoticia = $registroItems[$j]["IdNoticia"];
+                        break;
+                    }
+                }
+                
+                foreach ($itemCategories as $category) {
+                    for ($j = 0; $j < $contadorCategorias; $j ++) {
+                        if ($registroCategorias[$j]["NombreCategoria"] == $category) {
+                            $idCategoria = $registroCategorias[$j]["IdCategoria"];
+                            // Insertar relacion a la base de datos
+                            
+                            $conexion = mysqli_connect($servidor, $usuario, $contrasena, $basedatos);
+                            if (! $conexion) {
+                                die("Connection failed: " . mysqli_connect_error());
+                            }
+                            $sentenciaSQL = "INSERT INTO `categorizacion` (`IdRelacion`,`IdNoticia`, `IdCategoria`)
+                                          VALUES (NULL,'" . $idNoticia . "', '" . $idCategoria . "')";
+                            if (mysqli_query($conexion, $sentenciaSQL)) {} else {
+                                // echo "Error: " . $sentenciaSQL . "<br>" . mysqli_error($conexion); Si sale algun error aleatorio en la insercion, se deja esta bandera para el manejo de error
+                            }
+                            
+                            mysqli_close($conexion);
+                            
+                            // Fin de insertar relacion
+                            break;
+                        }
+                    }
+                }
+                
+                // Fin de relacionar
+                
+                // Fin de lo de categorias
             }
 
-            // Fin de insertar canal en la base de datos
-
-            // generateItem($siteImg,$itemTitle,$itemLink,$itemDescription,$itemCategories,$itemDate); TODO: Borrar esto cuando ya se impriman las categorias bien
+            // Fin de insertar noticia en la base de datos
 
             if ($counter >= 3) {
                 break;
@@ -234,38 +310,6 @@ function generateItem($siteImg, $itemTitle, $itemLink, $itemDescription, $itemCa
         // Fin de recarga
 
         if (! $insercionFallida) {
-            
-            // Lo de categorias
-            
-            foreach ($itemCategories as $category) {
-                for ($j = 0; $j < $contadorCategorias; $j ++) {
-                    if ($registroCategorias[$j]["NombreCategoria"] == $category) {
-                        $categoriaRepetida = true;
-                        break;
-                    }
-                }
-                if(!$categoriaRepetida){
-                    // Insertar categoria a la base de datos
-                    
-                    $conexion = mysqli_connect($servidor, $usuario, $contrasena, $basedatos);
-                    if (! $conexion) {
-                        die("Connection failed: " . mysqli_connect_error());
-                    }
-                    $sentenciaSQL = "INSERT INTO `categorias` (`IdCategoria`, `NombreCategoria`)
-                                          VALUES (NULL, '" . $category . "')";
-                    if (mysqli_query($conexion, $sentenciaSQL)) {} else {
-                        // echo "Error: " . $sentenciaSQL . "<br>" . mysqli_error($conexion); Si sale algun error aleatorio en la insercion, se deja esta bandera para el manejo de error
-                    }
-                    
-                    mysqli_close($conexion);
-                    
-                    // Fin de insertar categoria
-                }
-                $categoriaRepetida = false;
-            }
-            
-            // Fin de lo de categorias
-            
             // Crear los obejtos de notcias
             
             for ($j = 0; $j < $contadorItems; $j ++) {
