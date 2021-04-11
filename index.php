@@ -18,6 +18,17 @@ $sentenciaSQL = "SELECT * FROM `items`";
 $registroItems = ConsultarSQL($servidor, $usuario, $contrasena, $basedatos, $sentenciaSQL);
 $contadorItems = count($registroItems);
 
+//echo $registroItems[1]["Titulo"];
+/*
+ * Ejemplo de busqueda
+    $nomBusqueda = (string)$_GET["buscar"];
+    $keyword = trim ($nomBusqueda);
+    $sentenciaSQL = "SELECT campos que requieran aqui FROM tabla de la bd WHERE columna de busqueda LIKE '%$keyword%' ORDER BY columna para ordenar ASC o DESC";
+    $sentenciaSQL = "SELECT *  FROM `items` WHERE `Titulo` LIKE '%$keyword%' ORDER BY `Titulo` ASC";
+    $registros = ConsultarSQL ($servidor, $usuario, $contrasena, $basedatos, $sentenciaSQL);
+    $contador = count($registros);
+ */
+
 $sentenciaSQL = "SELECT * FROM `categorias`";
 $registroCategorias = ConsultarSQL($servidor, $usuario, $contrasena, $basedatos, $sentenciaSQL);
 $contadorCategorias = count($registroCategorias);
@@ -50,8 +61,8 @@ if (isset($_POST['submit']) && $_POST['RSSUrl'] != '') {
         if (! $conexion) {
             die("Connection failed: " . mysqli_connect_error());
         }
-        $sentenciaSQL = "INSERT INTO `canales` (`IdCanal`, `URL`, `NombreCanal`, `SiteImg`)
-     VALUES (NULL, '" . $siteLink . "', '" . $siteTitle . "', '" . $siteImg . "')";
+        $sentenciaSQL = "INSERT INTO `canales` (`IdCanal`, `URL`, `NombreCanal`, `SiteImg`, Feed)
+     VALUES (NULL, '" . $siteLink . "', '" . $siteTitle . "', '" . $siteImg . "', '" . $RSSUrl . "')";
         if (mysqli_query($conexion, $sentenciaSQL)) {} else {
             echo "Error: " . $sentenciaSQL . "<br>" . mysqli_error($conexion);
         }
@@ -305,7 +316,7 @@ function generateItem($siteImg, $itemTitle, $itemLink, $itemDescription, $itemCa
             
             // Se cargan nuevamente las noticias y categorizacion por si se agrego una nueva
             
-            $sentenciaSQL = "SELECT * FROM `items`";
+            $sentenciaSQL = "SELECT * FROM `items` ORDER BY Fecha DESC";
             $registroItems = ConsultarSQL($servidor, $usuario, $contrasena, $basedatos, $sentenciaSQL);
             $contadorItems = count($registroItems);
             
