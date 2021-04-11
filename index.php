@@ -2,15 +2,57 @@
 <html lang="en">
 
 <?php 
+  if (isset($_POST['submit']) && $_POST['RSSUrl'] != '') {
+    $RSSUrl = $_POST['RSSUrl'];
+    $feeds = loadXML($RSSUrl);
 
-if (isset($_POST['submit']) && $_POST['RSSUrl'] != '') {
-  $RSSUrl = $_POST['RSSUrl'];
-  $feeds = loadXML($RSSUrl);
+    if ($feeds != null && !empty($feeds)) {
+      $siteTitle = $feeds->channel->title;
+      $siteLink = $feeds->channel->link;
+      $siteImg = $feeds->channel->image->url;
+    }
+  }
 
-  if ($feeds != null && !empty($feeds)) {
-    $siteTitle = $feeds->channel->title;
-    $siteLink = $feeds->channel->link;
-    $siteImg = $feeds->channel->image->url;
+  function loadXML ($RSSUrl){
+    if (@simplexml_load_file($RSSUrl)) {
+      $feeds = simplexml_load_file($RSSUrl);
+    }else {
+      $feeds = null;
+      echo "Invalid RSS URL";
+    }
+    return $feeds;
+  }
+
+  function generateItem ($siteImg,$itemTitle,$itemLink,$itemDescription,$itemCategories,$itemDate) {
+    $categoryList = "";
+    foreach ($itemCategories as $category) {
+      $categoryList .= $category . "<hr>";
+    }
+    
+    $itemHTML = '<div class="col-lg-3 col-md-6 mb-4">'.
+      '<div class="card h-100">'.
+        '<img class="card-img-top" src="'. $siteImg . '" alt="">'.
+        '<div class="card-body">'.
+          '<h4 class="card-title">' . $itemTitle . '</h4>'.
+          '<p class="card-text">' . $itemDescription . '</p>'.
+        '</div>'.
+        '<div class="card-text">'.
+          $itemDate .
+        '</div>'.
+        '<div class="card-text">'.
+          '<a href="">' . $itemLink . '</a>'.
+        '</div>'.
+        '<div class="card-footer">'.
+          'Categorías <h6><hr/>' . $categoryList . '</h6>'.
+        '</div>'.
+        '<div class="card-footer">'.
+          '<a href="#" class="btn btn-primary">Ver actualizaciones</a>'.
+        '</div>'.
+      '</div>'.
+    '</div>';
+
+    echo $itemHTML;
+  }
 
 ?>
 
@@ -74,7 +116,7 @@ if (isset($_POST['submit']) && $_POST['RSSUrl'] != '') {
       <div class="input-group mb-3">
         <form method='post' action='' class="input-group-append">
           <input type="text" name="RSSUrl" class="form-control" placeholder="http://feeds.bbci.co.uk/news/world/rss.xml" aria-label="Recipient's username" aria-describedby="button-addon2">
-          <input type="submit" value="Ingresar" class="btn btn-outline-primary">
+          <input type="submit" name="submit"  value="Ingresar" class="btn btn-outline-primary">
           <!-- <div class="input-group-append">
             <button class="btn btn-outline-primary" type="button" id="button-addon2">Ingresar</button>
           </div> -->
@@ -86,62 +128,20 @@ if (isset($_POST['submit']) && $_POST['RSSUrl'] != '') {
     <!-- Page Features -->
     <div class="row text-center" id="ItemsContainer">
 
-    <?php 
-    $counter = 0;
-    foreach ($feeds->channel->item as $item) {
-      $itemTitle = $item->title;
-      $itemLink = $item->link;
-      $itemDescription = $item->description;
-      $itemDate = date('D, d M Y' ,strtotime($item->pubDate));
-      if ($counter >= 3) {
-        break;
-      }
-    ?>
-
-      <div class="col-lg-3 col-md-6 mb-4">
-        <div class="card h-100">
-          <img class="card-img-top" src="<?php echo $siteImg ?>" alt="">
-          <div class="card-body">
-            <h4 class="card-title"> <?php echo $itemTitle ?> </h4>
-            <p class="card-text"> <?php echo $itemDescription ?> </p>
-          </div>
-          <div class="card-text">
-            <?php echo $itemDate ?>
-          </div>
-          <div class="card-text">
-            <a href=""> <?php echo $itemLink ?> </a>
-          </div>
-          <div class="card-footer">
-            Categorías <br> AquiCategorias <br>
-          </div>
-          <div class="card-footer">
-            <a href="#" class="btn btn-primary">Ver actualizaciones</a>
-          </div>
-        </div>
-      </div>
-
       <?php
-          $counter ++;
+        $counter = 0;
+        foreach ($feeds->channel->item as $item) {
+          $itemTitle = $item->title;
+          $itemLink = $item->link;
+          $itemDescription = $item->description;
+          $itemCategories = $item->category;
+          $itemDate = date('D, d M Y' ,strtotime($item->pubDate));
+          generateItem($siteImg,$itemTitle,$itemLink,$itemDescription,$itemCategories,$itemDate);
+          if ($counter >= 3) {
+            break;
           }
+          $counter ++;
         }
-      }
-
-      function loadXML ($RSSUrl){
-        if (@simplexml_load_file($RSSUrl)) {
-          $feeds = simplexml_load_file($RSSUrl);
-        }else {
-          $feeds = null;
-          echo "Invalid RSS URL";
-        }
-        return $feeds;
-      }
-
-      function extraerSRC($cadena) {
-        preg_match('@src="([^"]+)"@', $cadena, $array);
-        $src = array_pop($array);
-        return $src;
-      }
-
       ?>
 
     </div>
