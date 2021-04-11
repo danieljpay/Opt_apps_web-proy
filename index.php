@@ -175,10 +175,14 @@ $contadorItems = count($registroItems);
 
       <?php
       
+      //Se cargan nuevamente los canales por si se agrego uno nuevo
+      
       $sentenciaSQL = "SELECT * FROM `canales`";
       $registroCanales = ConsultarSQL($servidor, $usuario, $contrasena, $basedatos, $sentenciaSQL);
       $contadorCanales = count($registroCanales);
       
+      //Fin de recarga
+      $insercionFallida = false;
         if (isset($_POST['submit'])){
           $counter = 0;
           foreach ($feeds->channel->item as $item) {
@@ -212,11 +216,12 @@ $contadorItems = count($registroItems);
                 if (! $conexion) {
                     die("Connection failed: " . mysqli_connect_error());
                 }
-                $sentenciaSQL = "INSERT INTO `items` (`IdNoticia`, `IdCanal`, `Titulo`, `itemLink`, `Descripcion`, `Fecha`)
+                $sentenciaSQL = "INSERT INTO `items` (`IdNoticia`, `IdCanal`, `Titulo`, `itemLikn`, `Descripcion`, `Fecha`)
      VALUES (NULL, '" . $idCanal . "', '" . $itemTitle . "', '" . $itemLink . "' , '" . $itemDescription . "' , '" . $itemDate . "')";
                 if (mysqli_query($conexion, $sentenciaSQL)) {
                 } else {
-                    echo "Error: " . $sentenciaSQL . "<br>" . mysqli_error($conexion);
+                    $insercionFallida = true;
+                    //echo "Error: " . $sentenciaSQL . "<br>" . mysqli_error($conexion); Si sale algun error aleatorio en la insercion, se deja esta bandera para el manejo de error
                 }
                 
                 mysqli_close($conexion);
@@ -225,14 +230,45 @@ $contadorItems = count($registroItems);
             //Fin de insertar canal en la base de datos
             
             
-            generateItem($siteImg,$itemTitle,$itemLink,$itemDescription,$itemCategories,$itemDate);
+            //generateItem($siteImg,$itemTitle,$itemLink,$itemDescription,$itemCategories,$itemDate); TODO: Borrar esto cuando ya se impriman las categorias bien
+            
             if ($counter >= 3) {
               break;
             }
             $counter ++;
             
           }
+          
+          //Se cargan nuevamente las noticias por si se agrego una nueva
+          
+          $sentenciaSQL = "SELECT * FROM `items`";
+          $registroItems = ConsultarSQL($servidor, $usuario, $contrasena, $basedatos, $sentenciaSQL);
+          $contadorItems = count($registroItems);
+          
+          //Fin de recarga
+          
+          //Crear los obejtos de notcias
+          
+          if(!$insercionFallida){
+              for ($j = 0; $j < $contadorItems; $j++){
+                  
+                  for ($i = 0; $i < $contadorCanales; $i++){
+                      if($registroCanales[$i]["IdCanal"] == $registroItems[$j]["IdCanal"]){
+                          $imagenItem = $registroCanales[$i]["SiteImg"];
+                          break;
+                      }
+                  }
+                  generateItem($imagenItem,$registroItems[$j]["Titulo"],$registroItems[$j]["itemLink"],$registroItems[$j]["Descripcion"],$itemCategories,$registroItems[$j]["Fecha"]);
+              }
+          } else {
+              print "Fuente de noticias no soportada.";
+          }
+          
+          
+          
         }
+        
+        //Fin de generar los objetos de noticias
         
       ?>
 
