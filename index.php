@@ -301,26 +301,47 @@ function generateItem($siteImg, $itemTitle, $itemLink, $itemDescription, $itemCa
             $counter ++;
         }
 
-        // Se cargan nuevamente las noticias por si se agrego una nueva
-
-        $sentenciaSQL = "SELECT * FROM `items`";
-        $registroItems = ConsultarSQL($servidor, $usuario, $contrasena, $basedatos, $sentenciaSQL);
-        $contadorItems = count($registroItems);
-
-        // Fin de recarga
-
         if (! $insercionFallida) {
+            
+            // Se cargan nuevamente las noticias y categorizacion por si se agrego una nueva
+            
+            $sentenciaSQL = "SELECT * FROM `items`";
+            $registroItems = ConsultarSQL($servidor, $usuario, $contrasena, $basedatos, $sentenciaSQL);
+            $contadorItems = count($registroItems);
+            
+            $sentenciaSQL = "SELECT * FROM `categorizacion`";
+            $registroCategorizacion = ConsultarSQL($servidor, $usuario, $contrasena, $basedatos, $sentenciaSQL);
+            $contadorCategorizacion = count($registroCategorizacion);
+            
+            $sentenciaSQL = "SELECT * FROM `categorias`";
+            $registroCategorias = ConsultarSQL($servidor, $usuario, $contrasena, $basedatos, $sentenciaSQL);
+            $contadorCategorias = count($registroCategorias);
+            
+            // Fin de recarga
+            
             // Crear los obejtos de notcias
             
             for ($j = 0; $j < $contadorItems; $j ++) {
-
+                $arrayCategories = array("");
                 for ($i = 0; $i < $contadorCanales; $i ++) {
                     if ($registroCanales[$i]["IdCanal"] == $registroItems[$j]["IdCanal"]) {
                         $imagenItem = $registroCanales[$i]["SiteImg"];
                         break;
                     }
                 }
-                generateItem($imagenItem, $registroItems[$j]["Titulo"], $registroItems[$j]["itemLink"], $registroItems[$j]["Descripcion"], $itemCategories, $registroItems[$j]["Fecha"]);
+                
+                for ($i = 0; $i < $contadorCategorizacion; $i ++) {
+                    if ($registroCategorizacion[$i]["IdNoticia"] == $registroItems[$j]["IdNoticia"]) {
+                        for ($f = 0; $f < $contadorCategorias; $f ++) {
+                            if ($registroCategorias[$f]["IdCategoria"] == $registroCategorizacion[$i]["IdCategoria"]) {
+                                $categoriaActual = $registroCategorias[$f]["NombreCategoria"];
+                                array_push($arrayCategories, $categoriaActual);
+                                break;
+                            }
+                        }
+                    }
+                }
+                generateItem($imagenItem, $registroItems[$j]["Titulo"], $registroItems[$j]["itemLink"], $registroItems[$j]["Descripcion"], $arrayCategories, $registroItems[$j]["Fecha"]);
             }
         } else {
             print "Fuente de noticias no soportada.";
