@@ -237,25 +237,25 @@ if (isset($_POST['submit'])) {
     // -------------------------------------Por fecha-----------------
     if(isset($_POST['byDate'])) {
         echo loadItemsFromBD($servidor, $usuario, $contrasena, $basedatos, 
-            $registroCanales, $contadorCanales, "SELECT * FROM `items` ORDER BY Fecha DESC");
+            $registroCanales, $contadorCanales, $queryByDate);
     }
 
     // ------------------------------------------ Por titulo -------------------
     if(isset($_POST['byTitle'])) {
         echo loadItemsFromBD($servidor, $usuario, $contrasena, $basedatos, 
-            $registroCanales, $contadorCanales, "SELECT * FROM `items` ORDER BY Titulo");
+            $registroCanales, $contadorCanales, $queryByTitle);
     }
 
     // ------------------------------------- Por Url ---------------------------
     if(isset($_POST['byUrl'])) {
         echo loadItemsFromBD($servidor, $usuario, $contrasena, $basedatos, 
-            $registroCanales, $contadorCanales, "SELECT * FROM `items` ORDER BY itemLink");
+            $registroCanales, $contadorCanales, $queryByUrl);
     }
 
     // --------------------------------------- por descripcion --------------------
     if(isset($_POST['byDescription'])) {
         echo loadItemsFromBD($servidor, $usuario, $contrasena, $basedatos, 
-            $registroCanales, $contadorCanales, "SELECT * FROM `items` ORDER BY Descripcion");
+            $registroCanales, $contadorCanales, $queryByDescription);
     }
 
 ?>
