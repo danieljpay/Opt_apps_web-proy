@@ -136,15 +136,46 @@ if (isset($_POST['submit']) && $_POST['RSSUrl'] != '') {
 			</p>
 			<form method='post' action='' class="input-group-append">
 				<div class="input-group mb-3">
-					<input type="text" name="RSSUrl" class="form-control"
+					<input 
+						type="text" 
+						name="RSSUrl" 
+						class="form-control"
 						placeholder="http://feeds.bbci.co.uk/news/world/rss.xml"
-						aria-label="Recipient's username" aria-describedby="button-addon2">
-					<input type="submit" name="submit" value="Ingresar"
-						class="btn btn-outline-primary">
+						>
+					<input 
+						type="submit" 
+						name="submit" 
+						value="Ingresar"
+						class="btn btn-primary"
+					>
 				</div>
 			</form>
 		</div>
-
+		<hr/>
+		<!-- Search Input Words -->
+		<div class="container">
+			<form action="" class="input-group-append">
+				<div class="input-group mb-3">
+					<label 
+						class="col-sm-auto control-label" 
+						for=""
+					>
+						<strong>Buscar noticias:</strong>
+					</label>
+					<input 
+						type="text" 
+						class="form-control" 
+						placeholder="downtown"
+					>
+					<input 
+						class="btn btn-outline-primary" 
+						name="" 
+						type="submit" 
+						value="Buscar"
+					>
+				</div>
+			</form>
+		</div>
 
 		<!-- Page Features -->
 		<div class="row text-center" id="ItemsContainer">
