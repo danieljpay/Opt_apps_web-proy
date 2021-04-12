@@ -133,9 +133,6 @@
 
         $registroCategorizacion = ReadCategorizacion ($servidor, $usuario, $contrasena, $basedatos);
         $contadorCategorizacion = count($registroCategorizacion);
-
-        $registroCategorias = ReadCategories ($servidor, $usuario, $contrasena, $basedatos);
-        $contadorCategorias = count($registroCategorias);
         
         // Fin de recarga
         
@@ -146,12 +143,8 @@
 
         for ($j = 0; $j < $contadorItems; $j ++) {
 			$arrayCategories = array("");
-			for ($i = 0; $i < $contadorCanales; $i ++) {
-				if ($registroCanales[$i]["IdCanal"] == $registroItems[$j]["IdCanal"]) {
-					$imagenItem = $registroCanales[$i]["SiteImg"];
-					break;
-				}
-			}
+
+			$NewSiteImg = GetChannelImage($registroItems[$j]["IdCanal"], $servidor, $usuario, $contrasena, $basedatos);
             
 			$idNoticiaBusqueda = $registroItems[$j]["IdNoticia"];
 			$sentenciaSQL = "SELECT NombreCategoria FROM categorizacion INNER JOIN categorias ON categorizacion.IdCategoria=categorias.IdCategoria WHERE categorizacion.IdNoticia=$idNoticiaBusqueda";
@@ -163,7 +156,7 @@
             }
           
 			$currentItem = array (
-				"Image" => $imagenItem,
+				"Image" => $NewSiteImg,
 				"Title" => $registroItems[$j]["Titulo"],
 				"Link" => $registroItems[$j]["itemLink"],
 				"Description" => $registroItems[$j]["Descripcion"],

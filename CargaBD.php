@@ -172,12 +172,14 @@
 
     // ***************************************************************** busqueda  ****************************************************************
     if(isset($_POST['search'])) {
-        echo searchItemsByTitle($servidor, $usuario, $contrasena, $basedatos, $registroItems, $_POST['search']);
+        echo searchItemsByTitle($servidor, $usuario, $contrasena, $basedatos,
+                                $registroItems, $_POST['search']);
     }
 
     //************************************************************* actualizar la pagina *****************************************
     if(isset($_POST['refresh'])){
-        echo loadItemsFromBD($servidor, $usuario, $contrasena, $basedatos, $registroCanales, $contadorCanales, $queryByDate);
+        echo loadItemsFromBD($servidor, $usuario, $contrasena, $basedatos,
+                            $registroCanales, $contadorCanales, $queryByDate);
     }
 
 
