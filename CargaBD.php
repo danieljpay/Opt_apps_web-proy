@@ -175,4 +175,10 @@
         echo searchItems($servidor, $usuario, $contrasena, $basedatos, $registroItems, $_POST['search']);
     }
 
+    //************************************************************* actualizar la pagina *****************************************
+    if(isset($_POST['refresh'])){
+        echo loadItemsFromBD($servidor, $usuario, $contrasena, $basedatos, $registroCanales, $contadorCanales, $queryByDate);
+    }
+
+
 ?>

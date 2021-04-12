@@ -124,7 +124,9 @@
 			<p class="lead">En este sitio podrás agregar las urls de las
 				páginas, blogs, videos de los que quieras estar pendientes de sus
 				actualizaciones.</p>
-			<a href="#" class="btn btn-primary btn-lg">Actualizar</a>
+				<form action="" method="post">
+					<button class="btn btn-primary btn-lg" name="refresh" type="submit">Actualizar</button>
+				</form>
 		</header>
 
 		<!-- Urls Input -->
