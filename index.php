@@ -2,78 +2,76 @@
 <html lang="en">
 
 <?php
-include ("variables.php");
+	include ("variables.php");
 
-include ("funciones.php");
+	include ("funciones.php");
 
-global $servidor, $usuario, $contrasena, $basedatos;
+	global $servidor, $usuario, $contrasena, $basedatos;
 
-// Obtener las tablas de la base de datos
+	// Obtener las tablas de la base de datos
 
-$registroCanales = ReadChannels($servidor, $usuario, $contrasena, $basedatos);
-$contadorCanales = count($registroCanales);
+	$registroCanales = ReadChannels($servidor, $usuario, $contrasena, $basedatos);
+	$contadorCanales = count($registroCanales);
 
-$registroItems = ReadItems ($servidor, $usuario, $contrasena, $basedatos);
-$contadorItems = count($registroItems);
+	$registroItems = ReadItems ($servidor, $usuario, $contrasena, $basedatos);
+	$contadorItems = count($registroItems);
 
-$registroCategorias = ReadCategories ($servidor, $usuario, $contrasena, $basedatos);
-$contadorCategorias = count($registroCategorias);
+	$registroCategorias = ReadCategories ($servidor, $usuario, $contrasena, $basedatos);
+	$contadorCategorias = count($registroCategorias);
 
-//echo $registroItems[1]["Titulo"];
-/*
- * Ejemplo de busqueda
-    $nomBusqueda = (string)$_GET["buscar"];
-    $keyword = trim ($nomBusqueda);
-    $sentenciaSQL = "SELECT campos que requieran aqui FROM tabla de la bd WHERE columna de busqueda LIKE '%$keyword%' ORDER BY columna para ordenar ASC o DESC";
-    $sentenciaSQL = "SELECT *  FROM `items` WHERE `Titulo` LIKE '%$keyword%' ORDER BY `Titulo` ASC";
-    $registros = ConsultarSQL ($servidor, $usuario, $contrasena, $basedatos, $sentenciaSQL);
-    $contador = count($registros);
- */
-
-
-
-// Fin de obtener las tablas de la base de datos
-
-if (isset($_POST['submit']) && $_POST['RSSUrl'] != '') {
-    $RSSUrl = $_POST['RSSUrl'];
-    $feeds = loadXML($RSSUrl);
-
-    if ($feeds != null && ! empty($feeds)) {
-        $siteTitle = $feeds->channel->title;
-        $siteLink = $feeds->channel->link;
-        $siteImg = $feeds->channel->image->url;
-    }
-
-    // Insertar canal a la base de datos
-
-    $canalRepetido = false;
-
-    for ($j = 0; $j < $contadorCanales; $j ++) {
-        if ($registroCanales[$j]["NombreCanal"] == $siteTitle) {
-            $canalRepetido = true;
-            break;
-        }
-    }
-
-    if (! $canalRepetido) {
-        $conexion = mysqli_connect($servidor, $usuario, $contrasena, $basedatos);
-        if (! $conexion) {
-            die("Connection failed: " . mysqli_connect_error());
-        }
-        $sentenciaSQL = "INSERT INTO `canales` (`IdCanal`, `URL`, `NombreCanal`, `SiteImg`, Feed)
-     VALUES (NULL, '" . $siteLink . "', '" . $siteTitle . "', '" . $siteImg . "', '" . $RSSUrl . "')";
-        if (mysqli_query($conexion, $sentenciaSQL)) {} else {
-            echo "Error: " . $sentenciaSQL . "<br>" . mysqli_error($conexion);
-        }
-
-        mysqli_close($conexion);
-    }
-
-    // Fin de insertar canal en la base de datos
-}
+	//echo $registroItems[1]["Titulo"];
+	/*
+	* Ejemplo de busqueda
+		$nomBusqueda = (string)$_GET["buscar"];
+		$keyword = trim ($nomBusqueda);
+		$sentenciaSQL = "SELECT campos que requieran aqui FROM tabla de la bd WHERE columna de busqueda LIKE '%$keyword%' ORDER BY columna para ordenar ASC o DESC";
+		$sentenciaSQL = "SELECT *  FROM `items` WHERE `Titulo` LIKE '%$keyword%' ORDER BY `Titulo` ASC";
+		$registros = ConsultarSQL ($servidor, $usuario, $contrasena, $basedatos, $sentenciaSQL);
+		$contador = count($registros);
+	*/
 
 
 
+	// Fin de obtener las tablas de la base de datos
+
+	if (isset($_POST['submit']) && $_POST['RSSUrl'] != '') {
+		$RSSUrl = $_POST['RSSUrl'];
+		$feeds = loadXML($RSSUrl);
+
+		if ($feeds != null && ! empty($feeds)) {
+			$siteTitle = $feeds->channel->title;
+			$siteLink = $feeds->channel->link;
+			$siteImg = $feeds->channel->image->url;
+		}
+
+		// Insertar canal a la base de datos
+
+		$canalRepetido = false;
+
+		for ($j = 0; $j < $contadorCanales; $j ++) {
+			if ($registroCanales[$j]["NombreCanal"] == $siteTitle) {
+				$canalRepetido = true;
+				break;
+			}
+		}
+
+		if (! $canalRepetido) {
+			$conexion = mysqli_connect($servidor, $usuario, $contrasena, $basedatos);
+			if (! $conexion) {
+				die("Connection failed: " . mysqli_connect_error());
+			}
+			$sentenciaSQL = "INSERT INTO `canales` (`IdCanal`, `URL`, `NombreCanal`, `SiteImg`, Feed)
+		VALUES (NULL, '" . $siteLink . "', '" . $siteTitle . "', '" . $siteImg . "', '" . $RSSUrl . "')";
+			if (mysqli_query($conexion, $sentenciaSQL)) {} else {
+				echo "Error: " . $sentenciaSQL . "<br>" . mysqli_error($conexion);
+			}
+
+			mysqli_close($conexion);
+		}
+
+		// Fin de insertar canal en la base de datos
+	}
+	
 ?>
 
 <head>
