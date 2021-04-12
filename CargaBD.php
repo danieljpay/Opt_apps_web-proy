@@ -167,15 +167,15 @@ if (isset($_POST['submit'])) {
           }
             
           for ($i = 0; $i < $contadorCategorizacion; $i ++) {
-              if ($registroCategorizacion[$i]["IdNoticia"] == $registroItems[$j]["IdNoticia"]) {
-                  for ($f = 0; $f < $contadorCategorias; $f ++) {
-                      if ($registroCategorias[$f]["IdCategoria"] == $registroCategorizacion[$i]["IdCategoria"]) {
-                          $categoriaActual = $registroCategorias[$f]["NombreCategoria"];
-                          array_push($arrayCategories, $categoriaActual);
-                          break;
-                      }
-                  }
-              }
+            if ($registroCategorizacion[$i]["IdNoticia"] == $registroItems[$j]["IdNoticia"]) {
+                for ($f = 0; $f < $contadorCategorias; $f ++) {
+                    if ($registroCategorias[$f]["IdCategoria"] == $registroCategorizacion[$i]["IdCategoria"]) {
+                        $categoriaActual = $registroCategorias[$f]["NombreCategoria"];
+                        array_push($arrayCategories, $categoriaActual);
+                        break;
+                    }
+                }
+            }
           }
           
           $currentItem = array (
