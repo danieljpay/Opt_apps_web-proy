@@ -127,6 +127,59 @@ function generateItem($item) {
     return $itemHTML;
 }
 
+	function loadItemsFromBD($servidor, $usuario, $contrasena, $basedatos, $registroCanales, $contadorCanales, $sentenciaSQL) {
+        $registroItems = ConsultarSQL($servidor, $usuario, $contrasena, $basedatos, $sentenciaSQL);
+        $contadorItems = count($registroItems);
+
+        $registroCategorizacion = ReadCategorizacion ($servidor, $usuario, $contrasena, $basedatos);
+        $contadorCategorizacion = count($registroCategorizacion);
+
+        $registroCategorias = ReadCategories ($servidor, $usuario, $contrasena, $basedatos);
+        $contadorCategorias = count($registroCategorias);
+        
+        // Fin de recarga
+        
+        // Crear los obejtos de notcias
+        $imagenItem = "";
+        $arrayItems = array();
+        $itemsFoundGenerated = array();
+
+        for ($j = 0; $j < $contadorItems; $j ++) {
+          $arrayCategories = array("");
+          for ($i = 0; $i < $contadorCanales; $i ++) {
+            if ($registroCanales[$i]["IdCanal"] == $registroItems[$j]["IdCanal"]) {
+              
+              $imagenItem = $registroCanales[$i]["SiteImg"];
+              break;
+            }
+          }
+            
+          for ($i = 0; $i < $contadorCategorizacion; $i ++) {
+            if ($registroCategorizacion[$i]["IdNoticia"] == $registroItems[$j]["IdNoticia"]) {
+                for ($f = 0; $f < $contadorCategorias; $f ++) {
+                    if ($registroCategorias[$f]["IdCategoria"] == $registroCategorizacion[$i]["IdCategoria"]) {
+                        $categoriaActual = $registroCategorias[$f]["NombreCategoria"];
+                        array_push($arrayCategories, $categoriaActual);
+                        break;
+                    }
+                }
+            }
+          }
+          
+          $currentItem = array (
+            "Image" => $imagenItem,
+            "Title" => $registroItems[$j]["Titulo"],
+            "Link" => $registroItems[$j]["itemLink"],
+            "Description" => $registroItems[$j]["Descripcion"],
+            "Date" => $registroItems[$j]["Fecha"],
+            "Categories" => $arrayCategories
+          );
+
+          array_push($arrayItems, $currentItem);
+        }
+        return generateAllItems($arrayItems);
+	}
+
 /*function generateItem($siteImg, $itemTitle, $itemLink, $itemDescription, $itemCategories, $itemDate) {
     $categoryList = "";
     foreach ($itemCategories as $category) {
