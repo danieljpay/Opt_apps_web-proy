@@ -142,48 +142,13 @@
             echo loadItemsFromBD($servidor, $usuario, $contrasena, $basedatos, 
                                 $registroCanales, $contadorCanales, $queryByDate);
             
-            //TODO ESTO ES DE LA BUSQUEDA ---------------------------------------
-
-            $keyword = "A";
-            $sentenciaSQL = "SELECT * FROM items WHERE Titulo LIKE '%$keyword%' ORDER BY Titulo ASC";
-            $itemsFound = ConsultarSQL($servidor, $usuario, $contrasena, $basedatos, $sentenciaSQL);
-            $itemsFoundGenerated = array();
-            $counterCategoria = 0;
-            foreach ($itemsFound as $item) {
-                $idNoticiaBusqueda = $registroItems[$counterCategoria]["IdNoticia"];
-                $idCanalBusqueda = $registroItems[$counterCategoria]["IdCanal"];
-                $NewSiteImg = GetChannelImage($idCanalBusqueda,$servidor, $usuario, $contrasena, $basedatos);
-
-                $sentenciaSQL = "SELECT NombreCategoria FROM categorizacion INNER JOIN categorias ON categorizacion.IdCategoria=categorias.IdCategoria WHERE categorizacion.IdNoticia=$idNoticiaBusqueda";
-                $busquedaCategorias = ConsultarSQL($servidor, $usuario, $contrasena, $basedatos, $sentenciaSQL);
-                
-                $categoriasActuales = array();
-                foreach ($busquedaCategorias as $categoria) {
-                    array_push($categoriasActuales,$categoria["NombreCategoria"]);
-                }
-
-                $currentItem = array (
-                    "Image" => $NewSiteImg,
-                    "Title" => $item["Titulo"],
-                    "Link" => $item["itemLink"],
-                    "Description" => $item["Descripcion"],
-                    "Date" => $item["Fecha"],
-                    "Categories" => $categoriasActuales
-                );
-                array_push($itemsFoundGenerated,$currentItem);
-                $counterCategoria++;
-            }
-            // TERMINA SECCION DE LA BUSQUEDA -------------------------------------------------------------------------
-
-            //ESTE ECHO ES PARA IMPRIMIR, PUEDES ELEGIR ENTRE arrayItems (Todos) y itemsFoundGenerated (Busqueda)
-            echo generateAllItems($arrayItems);
         } else {
             print "Fuente de noticias no soportada.";
         }
     }
     // Fin de generar los objetos de noticias
 
-    // ************************************************** comienzan las funciones de ordenamiento ****************************************************************
+    // **************************************************************** ordenamiento ****************************************************************
 
     if(isset($_POST['byDate'])) {
         echo loadItemsFromBD($servidor, $usuario, $contrasena, $basedatos, 
@@ -203,6 +168,11 @@
     if(isset($_POST['byDescription'])) {
         echo loadItemsFromBD($servidor, $usuario, $contrasena, $basedatos, 
                             $registroCanales, $contadorCanales, $queryByDescription);
+    }
+
+    // ***************************************************************** busqueda  ****************************************************************
+    if(isset($_POST['search'])) {
+        echo searchItems($servidor, $usuario, $contrasena, $basedatos, $registroItems, $_POST['search']);
     }
 
 ?>

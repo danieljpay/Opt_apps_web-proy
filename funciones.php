@@ -180,4 +180,37 @@
         return generateAllItems($arrayItems);
 	}
 
+	function searchItems($servidor, $usuario, $contrasena, $basedatos, $registroItems, $keyword) {
+        $sentenciaSQL = "SELECT * FROM items WHERE Titulo LIKE '%$keyword%' ORDER BY Titulo ASC";
+        $itemsFound = ConsultarSQL($servidor, $usuario, $contrasena, $basedatos, $sentenciaSQL);
+        $itemsFoundGenerated = array();
+        $counterCategoria = 0;
+        foreach ($itemsFound as $item) {
+            $idNoticiaBusqueda = $registroItems[$counterCategoria]["IdNoticia"];
+            $idCanalBusqueda = $registroItems[$counterCategoria]["IdCanal"];
+            $NewSiteImg = GetChannelImage($idCanalBusqueda,$servidor, $usuario, $contrasena, $basedatos);
+
+            $sentenciaSQL = "SELECT NombreCategoria FROM categorizacion INNER JOIN categorias ON categorizacion.IdCategoria=categorias.IdCategoria WHERE categorizacion.IdNoticia=$idNoticiaBusqueda";
+            $busquedaCategorias = ConsultarSQL($servidor, $usuario, $contrasena, $basedatos, $sentenciaSQL);
+            
+            $categoriasActuales = array();
+            foreach ($busquedaCategorias as $categoria) {
+                array_push($categoriasActuales,$categoria["NombreCategoria"]);
+            }
+
+            $currentItem = array (
+                "Image" => $NewSiteImg,
+                "Title" => $item["Titulo"],
+                "Link" => $item["itemLink"],
+                "Description" => $item["Descripcion"],
+                "Date" => $item["Fecha"],
+                "Categories" => $categoriasActuales
+            );
+            array_push($itemsFoundGenerated, $currentItem);
+            $counterCategoria++;
+        }
+
+        return generateAllItems($itemsFoundGenerated);
+	}
+
 ?>

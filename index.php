@@ -163,13 +163,13 @@
 						<strong>Buscar noticias:</strong>
 					</label>
 					<input 
-						type="text" 
 						class="form-control" 
+						name="search"
 						placeholder="downtown"
+						type="text" 
 					>
 					<input 
 						class="btn btn-outline-primary" 
-						name="search"
 						type="submit" 
 						value="Buscar"
 					>
@@ -184,7 +184,7 @@
 				<button class="btn btn-secondary" type="submit" name="byDescription">Descripción</button>
 			</form>
 			</div>
-		</div>
+			</div>
 
 		<!-- Page Features -->
 		<div class="row text-center" id="ItemsContainer">
