@@ -178,28 +178,25 @@
 				</div>
 			</form>
 			<div class="container mb-3">
-			<form action="" method="post">
-				<label class="col-sm-auto control-label" for=""><strong>Ordenar por:</strong></label>
-				<button class="btn btn-secondary" type="submit" name="byDate">Fecha</button>
-				<button class="btn btn-secondary" type="submit" name="byTitle">Título</button>
-				<button class="btn btn-secondary" type="submit" name="byUrl">URL</button>
-				<button class="btn btn-secondary" type="submit" name="byDescription">Descripción</button>
-			</form>
+				<form action="" method="post">
+					<label class="col-sm-auto control-label" for=""><strong>Ordenar por:</strong></label>
+					<button class="btn btn-secondary" type="submit" name="byDate">Fecha</button>
+					<button class="btn btn-secondary" type="submit" name="byTitle">Título</button>
+					<button class="btn btn-secondary" type="submit" name="byUrl">URL</button>
+					<button class="btn btn-secondary" type="submit" name="byDescription">Descripción</button>
+				</form>
 			</div>
-			</div>
+		</div>
 
 		<!-- Page Features -->
 		<div class="row text-center" id="ItemsContainer">
 
-    <?php
+			<?php
+				include("CargaBD.php");
+			?>
 
-      include("CargaBD.php");
-
-    ?>
-
-    </div>
+    	</div>
 		<!-- /.row -->
-
 	</div>
 	<!-- /.container -->
 
