@@ -139,58 +139,9 @@ if (isset($_POST['submit'])) {
         
         // Se cargan nuevamente las noticias y categorizacion por si se agrego una nueva
         
-        $sentenciaSQL = "SELECT * FROM items ORDER BY Fecha DESC";
-        $registroItems = ConsultarSQL($servidor, $usuario, $contrasena, $basedatos, $sentenciaSQL);
-        $contadorItems = count($registroItems);
-
-        $registroCategorizacion = ReadCategorizacion ($servidor, $usuario, $contrasena, $basedatos);
-        $contadorCategorizacion = count($registroCategorizacion);
-
-        $registroCategorias = ReadCategories ($servidor, $usuario, $contrasena, $basedatos);
-        $contadorCategorias = count($registroCategorias);
+        echo loadItemsFromBD($servidor, $usuario, $contrasena, $basedatos, 
+                            $registroCanales, $contadorCanales, $queryByDate);
         
-        // Fin de recarga
-        
-        // Crear los obejtos de notcias
-        $imagenItem = "";
-        $arrayItems = array();
-        $itemsFoundGenerated = array();
-
-        for ($j = 0; $j < $contadorItems; $j ++) {
-          $arrayCategories = array("");
-          for ($i = 0; $i < $contadorCanales; $i ++) {
-            if ($registroCanales[$i]["IdCanal"] == $registroItems[$j]["IdCanal"]) {
-              
-              $imagenItem = $registroCanales[$i]["SiteImg"];
-              break;
-            }
-          }
-            
-          for ($i = 0; $i < $contadorCategorizacion; $i ++) {
-            if ($registroCategorizacion[$i]["IdNoticia"] == $registroItems[$j]["IdNoticia"]) {
-                for ($f = 0; $f < $contadorCategorias; $f ++) {
-                    if ($registroCategorias[$f]["IdCategoria"] == $registroCategorizacion[$i]["IdCategoria"]) {
-                        $categoriaActual = $registroCategorias[$f]["NombreCategoria"];
-                        array_push($arrayCategories, $categoriaActual);
-                        break;
-                    }
-                }
-            }
-          }
-          
-          $currentItem = array (
-            "Image" => $imagenItem,
-            "Title" => $registroItems[$j]["Titulo"],
-            "Link" => $registroItems[$j]["itemLink"],
-            "Description" => $registroItems[$j]["Descripcion"],
-            "Date" => $registroItems[$j]["Fecha"],
-            "Categories" => $arrayCategories
-          );
-
-          array_push($arrayItems,$currentItem);
-        }
-        
-
         //TODO ESTO ES DE LA BUSQUEDA ---------------------------------------
 
         $keyword = "A";
@@ -234,28 +185,24 @@ if (isset($_POST['submit'])) {
 
     // ************************************************** comienzan las funciones de ordenamiento ****************************************************************
 
-    // -------------------------------------Por fecha-----------------
     if(isset($_POST['byDate'])) {
         echo loadItemsFromBD($servidor, $usuario, $contrasena, $basedatos, 
-            $registroCanales, $contadorCanales, $queryByDate);
+                            $registroCanales, $contadorCanales, $queryByDate);
     }
 
-    // ------------------------------------------ Por titulo -------------------
     if(isset($_POST['byTitle'])) {
         echo loadItemsFromBD($servidor, $usuario, $contrasena, $basedatos, 
-            $registroCanales, $contadorCanales, $queryByTitle);
+                            $registroCanales, $contadorCanales, $queryByTitle);
     }
 
-    // ------------------------------------- Por Url ---------------------------
     if(isset($_POST['byUrl'])) {
         echo loadItemsFromBD($servidor, $usuario, $contrasena, $basedatos, 
-            $registroCanales, $contadorCanales, $queryByUrl);
+                            $registroCanales, $contadorCanales, $queryByUrl);
     }
 
-    // --------------------------------------- por descripcion --------------------
     if(isset($_POST['byDescription'])) {
         echo loadItemsFromBD($servidor, $usuario, $contrasena, $basedatos, 
-            $registroCanales, $contadorCanales, $queryByDescription);
+                            $registroCanales, $contadorCanales, $queryByDescription);
     }
 
 ?>
