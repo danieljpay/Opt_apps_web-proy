@@ -169,4 +169,26 @@ function generateItem($item) {
     return $itemHTML;
 }*/
 
+	// Consultas para ordenamiento
+
+	function orderItemsByDate ($servidor, $usuario, $contrasena, $basedatos) {
+		$sentenciaSQL = "SELECT * FROM `items` ORDER BY Fecha DESC";
+		return ConsultarSQL($servidor, $usuario, $contrasena, $basedatos, $sentenciaSQL);
+	}
+
+	function orderItemsByTitle ($servidor, $usuario, $contrasena, $basedatos) {
+		$sentenciaSQL = "SELECT * FROM `items` ORDER BY Titulo";
+		return ConsultarSQL($servidor, $usuario, $contrasena, $basedatos, $sentenciaSQL);
+	}
+
+	function orderItemsByUrl ($servidor, $usuario, $contrasena, $basedatos) {
+		$sentenciaSQL = "SELECT * FROM `items` ORDER BY itemLink";
+		return ConsultarSQL($servidor, $usuario, $contrasena, $basedatos, $sentenciaSQL);
+	}
+
+	function orderItemsByDescription ($servidor, $usuario, $contrasena, $basedatos) {
+		$sentenciaSQL = "SELECT * FROM `items` ORDER BY Descripcion";
+		return ConsultarSQL($servidor, $usuario, $contrasena, $basedatos, $sentenciaSQL);
+	}
+
 ?>

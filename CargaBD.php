@@ -231,4 +231,227 @@ if (isset($_POST['submit'])) {
     }
 }
 // Fin de generar los objetos de noticias
+
+    // ************************************************** comienzan las funciones de ordenamiento ****************************************************************
+
+    // -------------------------------------Por fecha-----------------
+    if(isset($_POST['byDate'])) {
+        $sentenciaSQL = "SELECT * FROM `items` ORDER BY Fecha DESC";
+        $registroItems = ConsultarSQL($servidor, $usuario, $contrasena, $basedatos, $sentenciaSQL);
+        $contadorItems = count($registroItems);
+
+        $registroCategorizacion = ReadCategorizacion ($servidor, $usuario, $contrasena, $basedatos);
+        $contadorCategorizacion = count($registroCategorizacion);
+
+        $registroCategorias = ReadCategories ($servidor, $usuario, $contrasena, $basedatos);
+        $contadorCategorias = count($registroCategorias);
+        
+        // Fin de recarga
+        
+        // Crear los obejtos de notcias
+        $imagenItem = "";
+        $arrayItems = array();
+        $itemsFoundGenerated = array();
+
+        for ($j = 0; $j < $contadorItems; $j ++) {
+          $arrayCategories = array("");
+          for ($i = 0; $i < $contadorCanales; $i ++) {
+            if ($registroCanales[$i]["IdCanal"] == $registroItems[$j]["IdCanal"]) {
+              
+              $imagenItem = $registroCanales[$i]["SiteImg"];
+              break;
+            }
+          }
+            
+          for ($i = 0; $i < $contadorCategorizacion; $i ++) {
+            if ($registroCategorizacion[$i]["IdNoticia"] == $registroItems[$j]["IdNoticia"]) {
+                for ($f = 0; $f < $contadorCategorias; $f ++) {
+                    if ($registroCategorias[$f]["IdCategoria"] == $registroCategorizacion[$i]["IdCategoria"]) {
+                        $categoriaActual = $registroCategorias[$f]["NombreCategoria"];
+                        array_push($arrayCategories, $categoriaActual);
+                        break;
+                    }
+                }
+            }
+          }
+          
+          $currentItem = array (
+            "Image" => $imagenItem,
+            "Title" => $registroItems[$j]["Titulo"],
+            "Link" => $registroItems[$j]["itemLink"],
+            "Description" => $registroItems[$j]["Descripcion"],
+            "Date" => $registroItems[$j]["Fecha"],
+            "Categories" => $arrayCategories
+          );
+
+          array_push($arrayItems, $currentItem);
+        }
+        echo generateAllItems($arrayItems);
+    }
+
+    // ------------------------------------------ Por titulo -------------------
+    if(isset($_POST['byTitle'])) {
+        $sentenciaSQL = "SELECT * FROM `items` ORDER BY Titulo";
+        $registroItems = ConsultarSQL($servidor, $usuario, $contrasena, $basedatos, $sentenciaSQL);
+        $contadorItems = count($registroItems);
+
+        $registroCategorizacion = ReadCategorizacion ($servidor, $usuario, $contrasena, $basedatos);
+        $contadorCategorizacion = count($registroCategorizacion);
+
+        $registroCategorias = ReadCategories ($servidor, $usuario, $contrasena, $basedatos);
+        $contadorCategorias = count($registroCategorias);
+        
+        // Fin de recarga
+        
+        // Crear los obejtos de notcias
+        $imagenItem = "";
+        $arrayItems = array();
+        $itemsFoundGenerated = array();
+
+        for ($j = 0; $j < $contadorItems; $j ++) {
+          $arrayCategories = array("");
+          for ($i = 0; $i < $contadorCanales; $i ++) {
+            if ($registroCanales[$i]["IdCanal"] == $registroItems[$j]["IdCanal"]) {
+              
+              $imagenItem = $registroCanales[$i]["SiteImg"];
+              break;
+            }
+          }
+            
+          for ($i = 0; $i < $contadorCategorizacion; $i ++) {
+            if ($registroCategorizacion[$i]["IdNoticia"] == $registroItems[$j]["IdNoticia"]) {
+                for ($f = 0; $f < $contadorCategorias; $f ++) {
+                    if ($registroCategorias[$f]["IdCategoria"] == $registroCategorizacion[$i]["IdCategoria"]) {
+                        $categoriaActual = $registroCategorias[$f]["NombreCategoria"];
+                        array_push($arrayCategories, $categoriaActual);
+                        break;
+                    }
+                }
+            }
+          }
+          
+          $currentItem = array (
+            "Image" => $imagenItem,
+            "Title" => $registroItems[$j]["Titulo"],
+            "Link" => $registroItems[$j]["itemLink"],
+            "Description" => $registroItems[$j]["Descripcion"],
+            "Date" => $registroItems[$j]["Fecha"],
+            "Categories" => $arrayCategories
+          );
+
+          array_push($arrayItems, $currentItem);
+        }
+        echo generateAllItems($arrayItems);
+    }
+
+    // ------------------------------------- Por Url ---------------------------
+    if(isset($_POST['byUrl'])) {
+        $sentenciaSQL = "SELECT * FROM `items` ORDER BY itemLink";
+        $registroItems = ConsultarSQL($servidor, $usuario, $contrasena, $basedatos, $sentenciaSQL);
+        $contadorItems = count($registroItems);
+
+        $registroCategorizacion = ReadCategorizacion ($servidor, $usuario, $contrasena, $basedatos);
+        $contadorCategorizacion = count($registroCategorizacion);
+
+        $registroCategorias = ReadCategories ($servidor, $usuario, $contrasena, $basedatos);
+        $contadorCategorias = count($registroCategorias);
+        
+        // Fin de recarga
+        
+        // Crear los obejtos de notcias
+        $imagenItem = "";
+        $arrayItems = array();
+        $itemsFoundGenerated = array();
+
+        for ($j = 0; $j < $contadorItems; $j ++) {
+          $arrayCategories = array("");
+          for ($i = 0; $i < $contadorCanales; $i ++) {
+            if ($registroCanales[$i]["IdCanal"] == $registroItems[$j]["IdCanal"]) {
+              
+              $imagenItem = $registroCanales[$i]["SiteImg"];
+              break;
+            }
+          }
+            
+          for ($i = 0; $i < $contadorCategorizacion; $i ++) {
+            if ($registroCategorizacion[$i]["IdNoticia"] == $registroItems[$j]["IdNoticia"]) {
+                for ($f = 0; $f < $contadorCategorias; $f ++) {
+                    if ($registroCategorias[$f]["IdCategoria"] == $registroCategorizacion[$i]["IdCategoria"]) {
+                        $categoriaActual = $registroCategorias[$f]["NombreCategoria"];
+                        array_push($arrayCategories, $categoriaActual);
+                        break;
+                    }
+                }
+            }
+          }
+          
+          $currentItem = array (
+            "Image" => $imagenItem,
+            "Title" => $registroItems[$j]["Titulo"],
+            "Link" => $registroItems[$j]["itemLink"],
+            "Description" => $registroItems[$j]["Descripcion"],
+            "Date" => $registroItems[$j]["Fecha"],
+            "Categories" => $arrayCategories
+          );
+
+          array_push($arrayItems, $currentItem);
+        }
+        echo generateAllItems($arrayItems);
+    }
+
+    // --------------------------------------- por descripcion --------------------
+    if(isset($_POST['byDescription'])) {
+        $sentenciaSQL = "SELECT * FROM `items` ORDER BY Descripcion";
+        $registroItems = ConsultarSQL($servidor, $usuario, $contrasena, $basedatos, $sentenciaSQL);
+        $contadorItems = count($registroItems);
+
+        $registroCategorizacion = ReadCategorizacion ($servidor, $usuario, $contrasena, $basedatos);
+        $contadorCategorizacion = count($registroCategorizacion);
+
+        $registroCategorias = ReadCategories ($servidor, $usuario, $contrasena, $basedatos);
+        $contadorCategorias = count($registroCategorias);
+        
+        // Fin de recarga
+        
+        // Crear los obejtos de notcias
+        $imagenItem = "";
+        $arrayItems = array();
+        $itemsFoundGenerated = array();
+
+        for ($j = 0; $j < $contadorItems; $j ++) {
+          $arrayCategories = array("");
+          for ($i = 0; $i < $contadorCanales; $i ++) {
+            if ($registroCanales[$i]["IdCanal"] == $registroItems[$j]["IdCanal"]) {
+              
+              $imagenItem = $registroCanales[$i]["SiteImg"];
+              break;
+            }
+          }
+            
+          for ($i = 0; $i < $contadorCategorizacion; $i ++) {
+            if ($registroCategorizacion[$i]["IdNoticia"] == $registroItems[$j]["IdNoticia"]) {
+                for ($f = 0; $f < $contadorCategorias; $f ++) {
+                    if ($registroCategorias[$f]["IdCategoria"] == $registroCategorizacion[$i]["IdCategoria"]) {
+                        $categoriaActual = $registroCategorias[$f]["NombreCategoria"];
+                        array_push($arrayCategories, $categoriaActual);
+                        break;
+                    }
+                }
+            }
+          }
+          
+          $currentItem = array (
+            "Image" => $imagenItem,
+            "Title" => $registroItems[$j]["Titulo"],
+            "Link" => $registroItems[$j]["itemLink"],
+            "Description" => $registroItems[$j]["Descripcion"],
+            "Date" => $registroItems[$j]["Fecha"],
+            "Categories" => $arrayCategories
+          );
+
+          array_push($arrayItems, $currentItem);
+        }
+        echo generateAllItems($arrayItems);
+    }
+
 ?>

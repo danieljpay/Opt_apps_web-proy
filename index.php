@@ -156,7 +156,7 @@ if (isset($_POST['submit']) && $_POST['RSSUrl'] != '') {
 
 		<!-- Search Input Words -->
 		<div class="container">
-			<form action="" class="input-group-append">
+			<form action="" method="post" class="input-group-append">
 				<div class="input-group mb-3">
 					<label 
 						class="col-sm-auto control-label" 
@@ -171,19 +171,20 @@ if (isset($_POST['submit']) && $_POST['RSSUrl'] != '') {
 					>
 					<input 
 						class="btn btn-outline-primary" 
-						name="" 
+						name="search"
 						type="submit" 
 						value="Buscar"
 					>
 				</div>
 			</form>
 			<div class="container mb-3">
+			<form action="" method="post">
 				<label class="col-sm-auto control-label" for=""><strong>Ordenar por:</strong></label>
-				<button class="btn btn-secondary">Fecha</button>
-				<button class="btn btn-secondary">Título</button>
-				<button class="btn btn-secondary">URL</button>
-				<button class="btn btn-secondary">Descripción</button>
-				<button class="btn btn-secondary">Categorías</button>
+				<button class="btn btn-secondary" type="submit" name="byDate">Fecha</button>
+				<button class="btn btn-secondary" type="submit" name="byTitle">Título</button>
+				<button class="btn btn-secondary" type="submit" name="byUrl">URL</button>
+				<button class="btn btn-secondary" type="submit" name="byDescription">Descripción</button>
+			</form>
 			</div>
 		</div>
 
