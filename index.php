@@ -19,19 +19,6 @@
 	$registroCategorias = ReadCategories ($servidor, $usuario, $contrasena, $basedatos);
 	$contadorCategorias = count($registroCategorias);
 
-	//echo $registroItems[1]["Titulo"];
-	/*
-	* Ejemplo de busqueda
-		$nomBusqueda = (string)$_GET["buscar"];
-		$keyword = trim ($nomBusqueda);
-		$sentenciaSQL = "SELECT campos que requieran aqui FROM tabla de la bd WHERE columna de busqueda LIKE '%$keyword%' ORDER BY columna para ordenar ASC o DESC";
-		$sentenciaSQL = "SELECT *  FROM `items` WHERE `Titulo` LIKE '%$keyword%' ORDER BY `Titulo` ASC";
-		$registros = ConsultarSQL ($servidor, $usuario, $contrasena, $basedatos, $sentenciaSQL);
-		$contador = count($registros);
-	*/
-
-
-
 	// Fin de obtener las tablas de la base de datos
 
 	if (isset($_POST['submit']) && $_POST['RSSUrl'] != '') {

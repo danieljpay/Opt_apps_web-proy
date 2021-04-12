@@ -172,7 +172,7 @@
 
     // ***************************************************************** busqueda  ****************************************************************
     if(isset($_POST['search'])) {
-        echo searchItems($servidor, $usuario, $contrasena, $basedatos, $registroItems, $_POST['search']);
+        echo searchItemsByTitle($servidor, $usuario, $contrasena, $basedatos, $registroItems, $_POST['search']);
     }
 
     //************************************************************* actualizar la pagina *****************************************

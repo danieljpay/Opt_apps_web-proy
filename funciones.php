@@ -145,42 +145,38 @@
         $itemsFoundGenerated = array();
 
         for ($j = 0; $j < $contadorItems; $j ++) {
-          $arrayCategories = array("");
-          for ($i = 0; $i < $contadorCanales; $i ++) {
-            if ($registroCanales[$i]["IdCanal"] == $registroItems[$j]["IdCanal"]) {
-              
-              $imagenItem = $registroCanales[$i]["SiteImg"];
-              break;
-            }
-          }
+			$arrayCategories = array("");
+			for ($i = 0; $i < $contadorCanales; $i ++) {
+				if ($registroCanales[$i]["IdCanal"] == $registroItems[$j]["IdCanal"]) {
+					$imagenItem = $registroCanales[$i]["SiteImg"];
+					break;
+				}
+			}
             
-          for ($i = 0; $i < $contadorCategorizacion; $i ++) {
-            if ($registroCategorizacion[$i]["IdNoticia"] == $registroItems[$j]["IdNoticia"]) {
-                for ($f = 0; $f < $contadorCategorias; $f ++) {
-                    if ($registroCategorias[$f]["IdCategoria"] == $registroCategorizacion[$i]["IdCategoria"]) {
-                        $categoriaActual = $registroCategorias[$f]["NombreCategoria"];
-                        array_push($arrayCategories, $categoriaActual);
-                        break;
-                    }
-                }
-            }
-          }
-          
-          $currentItem = array (
-            "Image" => $imagenItem,
-            "Title" => $registroItems[$j]["Titulo"],
-            "Link" => $registroItems[$j]["itemLink"],
-            "Description" => $registroItems[$j]["Descripcion"],
-            "Date" => $registroItems[$j]["Fecha"],
-            "Categories" => $arrayCategories
-          );
+			$idNoticiaBusqueda = $registroItems[$j]["IdNoticia"];
+			$sentenciaSQL = "SELECT NombreCategoria FROM categorizacion INNER JOIN categorias ON categorizacion.IdCategoria=categorias.IdCategoria WHERE categorizacion.IdNoticia=$idNoticiaBusqueda";
+            $categories = ConsultarSQL($servidor, $usuario, $contrasena, $basedatos, $sentenciaSQL);
 
-          array_push($arrayItems, $currentItem);
+			$categoriasActuales = array();
+            foreach ($categories as $categoria) {
+                array_push($categoriasActuales, $categoria["NombreCategoria"]);
+            }
+          
+			$currentItem = array (
+				"Image" => $imagenItem,
+				"Title" => $registroItems[$j]["Titulo"],
+				"Link" => $registroItems[$j]["itemLink"],
+				"Description" => $registroItems[$j]["Descripcion"],
+				"Date" => $registroItems[$j]["Fecha"],
+				"Categories" => $categoriasActuales
+			);
+
+          	array_push($arrayItems, $currentItem);
         }
         return generateAllItems($arrayItems);
 	}
 
-	function searchItems($servidor, $usuario, $contrasena, $basedatos, $registroItems, $keyword) {
+	function searchItemsByTitle($servidor, $usuario, $contrasena, $basedatos, $registroItems, $keyword) {
         $sentenciaSQL = "SELECT * FROM items WHERE Titulo LIKE '%$keyword%' ORDER BY Titulo ASC";
         $itemsFound = ConsultarSQL($servidor, $usuario, $contrasena, $basedatos, $sentenciaSQL);
         $itemsFoundGenerated = array();
