@@ -119,7 +119,7 @@
 		'</h6>' . 
 		'</div>' . 
 		'<div class="card-footer">' . 
-		'<a href="#" class="btn btn-primary">Ver actualizaciones</a>' . 
+		'<a href=' . $item["Link"] . ' class="btn btn-primary">Leer noticia</a>' . 
 		'</div>' . 
 		'</div>' . 
 		'</div>';
