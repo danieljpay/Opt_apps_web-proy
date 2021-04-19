@@ -79,7 +79,7 @@
 
 </head>
 
-<body>
+<body style=" background-image: url('./public/assets/background.jpg'); background-attachment: fixed; ">
 
 	<!-- Navigation -->
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
