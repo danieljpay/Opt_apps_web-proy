@@ -112,7 +112,13 @@
 				páginas, blogs, videos de los que quieras estar pendientes de sus
 				actualizaciones.</p>
 				<form action="" method="post">
-					<button class="btn btn-primary btn-lg" name="refresh" type="submit">Actualizar</button>
+					<button 
+						class="btn btn-primary btn-lg" 
+						name="refresh" 
+						type="submit"
+					>
+						Actualizar <img src="./public/assets/refresh-icon.png">
+					</button>
 				</form>
 		</header>
 
@@ -128,7 +134,7 @@
 						name="RSSUrl" 
 						class="form-control"
 						placeholder="http://feeds.bbci.co.uk/news/world/rss.xml"
-						>
+					>
 					<input 
 						type="submit" 
 						name="submit" 
