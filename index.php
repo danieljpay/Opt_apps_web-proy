@@ -156,7 +156,7 @@
 						class="col-sm-auto control-label" 
 						for=""
 					>
-						<strong>Buscar noticias:</strong>
+						<strong><img src="./public/assets/search-icon.png"/> - Buscar noticias:</strong>
 					</label>
 					<input 
 						class="form-control" 
