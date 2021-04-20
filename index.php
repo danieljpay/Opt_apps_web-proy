@@ -70,6 +70,7 @@
 <meta name="author" content="">
 
 <title>Lector RSS</title>
+<link href="./public/assets/favicon.png" rel="icon" type="image/png">
 
 <!-- Bootstrap core CSS -->
 <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
