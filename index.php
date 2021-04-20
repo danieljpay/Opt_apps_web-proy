@@ -173,7 +173,13 @@
 			</form>
 			<div class="container mb-3">
 				<form action="" method="post">
-					<label class="col-sm-auto control-label" for=""><strong>Ordenar por:</strong></label>
+					<label 
+						class="col-sm-auto control-label" 
+						for=""
+					>
+						<img src="./public/assets/sort-icon.png"/>
+						<strong> - Ordenar por:</strong>
+					</label>
 					<button class="btn btn-secondary" type="submit" name="byDate">Fecha</button>
 					<button class="btn btn-secondary" type="submit" name="byTitle">Título</button>
 					<button class="btn btn-secondary" type="submit" name="byUrl">URL</button>
