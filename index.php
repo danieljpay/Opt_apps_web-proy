@@ -82,46 +82,13 @@
 
 <body style=" background-image: url('./public/assets/background.jpg'); background-attachment: fixed; ">
 
-	<!-- Navigation -->
-	<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-		<div class="container">
-			<a class="navbar-brand" href="#">Feed RSS</a>
-			<button class="navbar-toggler" type="button" data-toggle="collapse"
-				data-target="#navbarResponsive" aria-controls="navbarResponsive"
-				aria-expanded="false" aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-			<div class="collapse navbar-collapse" id="navbarResponsive">
-				<ul class="navbar-nav ml-auto">
-					<li class="nav-item active">
-						<a class="nav-link" href="#">
-							Home <span class="sr-only">(current)</span>
-						</a>
-					</li>
-				</ul>
-			</div>
-		</div>
-	</nav>
+	<?php include("components/header.php") ?>
 
 	<!-- Page Content -->
 	<div class="container">
 
 		<!-- Jumbotron Header -->
-		<header class="jumbotron my-4">
-			<h1 class="display-3">¡Bienvenido a nuestro feed RSS!</h1>
-			<p class="lead">En este sitio podrás agregar las urls de las
-				páginas, blogs, videos de los que quieras estar pendientes de sus
-				actualizaciones.</p>
-				<form action="" method="post">
-					<button 
-						class="btn btn-primary btn-lg" 
-						name="refresh" 
-						type="submit"
-					>
-						Actualizar <img src="./public/assets/refresh-icon.png">
-					</button>
-				</form>
-		</header>
+		<?php include("components/jumbotron.php") ?>
 
 		<!-- Urls Input -->
 		<div class="container">
@@ -201,13 +168,7 @@
 	<!-- /.container -->
 
 	<!-- Footer -->
-	<footer class="py-5 bg-dark">
-		<div class="container">
-			<p class="m-0 text-center text-white">by Jorge A. Chi, Jimmy N. Ojeda
-				y Daniel J. Pérez &copy;</p>
-		</div>
-		<!-- /.container -->
-	</footer>
+	<?php include("components/footer.php") ?>
 
 	<!-- Bootstrap core JavaScript -->
 	<script src="vendor/jquery/jquery.min.js"></script>
