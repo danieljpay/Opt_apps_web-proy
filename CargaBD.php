@@ -139,8 +139,8 @@
             
             // Se cargan nuevamente las noticias y categorizacion por si se agrego una nueva
             
-            echo loadItemsFromBD($servidor, $usuario, $contrasena, $basedatos, 
-                                $registroCanales, $contadorCanales, $queryByDate);
+            echo loadItemsFromDB($servidor, $usuario, $contrasena, $basedatos, 
+                                $queryByDate);
             
         } else {
             print "Fuente de noticias no soportada.";
@@ -151,23 +151,19 @@
     // **************************************************************** ordenamiento ****************************************************************
 
     if(isset($_POST['byDate'])) {
-        echo loadItemsFromBD($servidor, $usuario, $contrasena, $basedatos, 
-                            $registroCanales, $contadorCanales, $queryByDate);
+        echo loadItemsFromDB($servidor, $usuario, $contrasena, $basedatos, $queryByDate);
     }
 
     if(isset($_POST['byTitle'])) {
-        echo loadItemsFromBD($servidor, $usuario, $contrasena, $basedatos, 
-                            $registroCanales, $contadorCanales, $queryByTitle);
+        echo loadItemsFromDB($servidor, $usuario, $contrasena, $basedatos, $queryByTitle);
     }
 
     if(isset($_POST['byUrl'])) {
-        echo loadItemsFromBD($servidor, $usuario, $contrasena, $basedatos, 
-                            $registroCanales, $contadorCanales, $queryByUrl);
+        echo loadItemsFromDB($servidor, $usuario, $contrasena, $basedatos, $queryByUrl);
     }
 
     if(isset($_POST['byDescription'])) {
-        echo loadItemsFromBD($servidor, $usuario, $contrasena, $basedatos, 
-                            $registroCanales, $contadorCanales, $queryByDescription);
+        echo loadItemsFromDB($servidor, $usuario, $contrasena, $basedatos, $queryByDescription);
     }
 
     // ***************************************************************** busqueda  ****************************************************************
