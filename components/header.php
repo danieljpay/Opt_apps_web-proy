@@ -11,7 +11,7 @@
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item active">
                     <a class="nav-link" href="index.php">
-                        Home <span class="sr-only">(current)</span>
+                        <span class="sr-only">Home</span>
                     </a>
                 </li>
             </ul>
