@@ -127,6 +127,7 @@
 		return $itemHTML;
 	}
 
+	//Función que genera todas las tarjetas de las noticias en Index.php
 	function loadItemsFromDB($servidor, $usuario, $contrasena, $basedatos, $sentenciaSQL) {
         return generateAllItems(getAllNewsFromDataBase($servidor, $usuario, $contrasena, $basedatos, $sentenciaSQL));
 	}
@@ -164,13 +165,13 @@
         return generateAllItems($itemsFoundGenerated);
 	}
 
+	//Función que carga las noticias de la base de datos y devuelve un array de Items(Noticias)
 	function getAllNewsFromDataBase ($servidor, $usuario, $contrasena, $basedatos, $sentenciaSQL) {
 		$registroItems = ConsultarSQL($servidor, $usuario, $contrasena, $basedatos, $sentenciaSQL);
         $contadorItems = count($registroItems);
 
         $registroCategorizacion = ReadCategorizacion ($servidor, $usuario, $contrasena, $basedatos);
         $contadorCategorizacion = count($registroCategorizacion);
-        
         // Fin de recarga
         
         // Crear los obejtos de notcias
@@ -198,12 +199,26 @@
 				"Link" => $registroItems[$j]["itemLink"],
 				"Description" => $registroItems[$j]["Descripcion"],
 				"Date" => $registroItems[$j]["Fecha"],
-				"Categories" => $categoriasActuales
+				"Categories" => $categoriasActuales,
+				"ChannelID" => $registroItems[$j]["IdCanal"]
 			);
 
           	array_push($arrayItems, $currentItem);
         }
 		return $arrayItems;
+	}
+
+	function getMatrixNewsByChannel ($servidor, $usuario, $contrasena, $basedatos, $sentenciaSQL) {
+		$allNews = getAllNewsFromDataBase($servidor, $usuario, $contrasena, $basedatos, $sentenciaSQL);
+
+		//newsMatrixByChannel guarda todas las noticias ordenadamente
+		//Se accede con la estructura $newsMatrixByChannel[Canal][Noticia] 
+		$newsMatrixByChannel = array();
+		foreach ($allNews as $new) {
+			$newsMatrix[$new["ChannelID"]][] = $new;
+		}
+
+		return $newsMatrix;
 	}
 	
 ?>

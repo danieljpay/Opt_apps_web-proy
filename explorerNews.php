@@ -1,5 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+
+<?php 
+
+    include ("variables.php");
+
+    include ("funciones.php");
+
+    getMatrixNewsByChannel($servidor, $usuario, $contrasena, $basedatos, $queryByDate);
+
+?>
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
