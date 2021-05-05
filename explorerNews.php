@@ -7,7 +7,7 @@
 
     include ("funciones.php");
 
-    getMatrixNewsByChannel($servidor, $usuario, $contrasena, $basedatos, $queryByDate);
+    
 
 ?>
 
@@ -29,8 +29,8 @@
 <body style=" background-image: url('./public/assets/background.jpg'); background-attachment: fixed; ">
     <?php include("components/header.php") ?>
 
-
-    <div class="container">
+    <?php echo generateNewsCardAccordion($servidor, $usuario, $contrasena, $basedatos, $queryByDate); ?>
+    <!-- <div class="container">
         <div class="accordion" id="accordionExample">
             <div class="accordion-item">
                 <h2 class="accordion-header" id="headingOne">
@@ -90,7 +90,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 
     <?php include("components/footer.php") ?>
     <!-- JavaScript Bundle with Popper -->

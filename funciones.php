@@ -200,7 +200,8 @@
 				"Description" => $registroItems[$j]["Descripcion"],
 				"Date" => $registroItems[$j]["Fecha"],
 				"Categories" => $categoriasActuales,
-				"ChannelID" => $registroItems[$j]["IdCanal"]
+				"ChannelID" => $registroItems[$j]["IdCanal"],
+				"NewID" => $registroItems[$j]["IdNoticia"]
 			);
 
           	array_push($arrayItems, $currentItem);
@@ -219,6 +220,78 @@
 		}
 
 		return $newsMatrix;
+	}
+
+	function generateNewsCardAccordion ($servidor, $usuario, $contrasena, $basedatos, $sentenciaSQL) {
+		$newsMatrix = getMatrixNewsByChannel ($servidor, $usuario, $contrasena, $basedatos, $sentenciaSQL);
+		$channels = ReadChannels ($servidor, $usuario, $contrasena, $basedatos);
+
+		$accordion = 
+		'<div class="container">' .
+        	'<div class="accordion" id="accordionExample">' .
+            	'<div class="accordion-item">' ;
+
+
+		$generatedNewsCards = "";
+		for ($i=0; $i < count($channels) ; $i++) { 
+			$generatedNewsCards .= generateACardAccordion($channels[$i]["NombreCanal"], $newsMatrix[$i+1]);
+		}
+
+		$closeAccordion =
+                '</div>' .
+            '</div>' .
+		'</div>' ;
+
+		return $accordion . $generatedNewsCards . $closeAccordion;
+	}
+
+	function generateACardAccordion ($channelTitle, $newsArray) {
+		$accordion =
+		'<h2 class="accordion-header shadow-sm p-2 mb-2 bg-white rounded" id="heading' . $newsArray[0]["ChannelID"] . '">' .
+			'<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse' . $newsArray[0]["ChannelID"] . '" aria-expanded="false" aria-controls="collapse' . $newsArray[0]["ChannelID"] . '">' .
+				$channelTitle .
+			'</button>' .
+		'</h2>' .
+		'<div id="collapse' . $newsArray[0]["ChannelID"] . '" class="accordion-collapse collapse" aria-labelledby="heading' . $newsArray[0]["ChannelID"] . '" data-bs-parent="#accordionExample">' .
+			'<div class="accordion-body">' .
+				'<div class="row">' .
+					'<div class="col-4">' . 
+						'<div class="list-group" id="list-tab" role="tablist">' .
+							generateOptionTittle($newsArray) .
+						'</div>' .
+					'</div>' .
+					'<div class="col-8">' .
+						'<div class="tab-content" id="nav-tabContent">' .
+							generateOptionInfo($newsArray) .
+						'</div>' .
+					'</div>' .
+				'</div>' .
+			'</div>' .
+		'</div>';
+
+		return $accordion;
+	}
+
+	function generateOptionTittle ($newsArray) {
+		$titlePerOption = "";
+		foreach ($newsArray as $new) {
+			$titlePerOption .= 
+			'<a class="list-group-item list-group-item-action" id="list-' . $new["NewID"] . '-list" data-bs-toggle="list" href="#list-' . $new["NewID"] . '" role="tab" aria-controls="' . $new["NewID"] . '">' . 
+			$new["Title"] . 
+			'</a>';
+		}
+		return $titlePerOption;
+	}
+
+	function generateOptionInfo ($newsArray) {
+		$infoPerOption = "";
+		foreach ($newsArray as $new) {
+			$infoPerOption .=
+			'<div class="tab-pane fade" id="list-' . $new["NewID"] . '" role="tabpanel" aria-labelledby="list-' . $new["NewID"] . '-list">' .
+			$new["Description"] .
+			'</div>';
+		}
+		return $infoPerOption;
 	}
 	
 ?>
