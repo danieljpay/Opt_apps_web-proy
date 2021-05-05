@@ -289,6 +289,8 @@
 			$infoPerOption .=
 			'<div class="tab-pane fade" id="list-' . $new["NewID"] . '" role="tabpanel" aria-labelledby="list-' . $new["NewID"] . '-list">' .
 			$new["Description"] .
+			'<br/>' .
+			'<a href="' . $new["Link"] . '" target="blank">' . $new["Link"] . '</a>' .
 			'</div>';
 		}
 		return $infoPerOption;
