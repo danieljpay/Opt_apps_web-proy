@@ -2,9 +2,9 @@
 <html lang="en">
 
 <?php
-	include ("variables.php");
+	include("variables.php");
 
-	include ("funciones.php");
+	include("funciones.php");
 
 	global $servidor, $usuario, $contrasena, $basedatos;
 
@@ -58,13 +58,11 @@
 
 		// Fin de insertar canal en la base de datos
 	}
-	
 ?>
 
 <head>
 	<meta charset="utf-8">
-	<meta name="viewport"
-		content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<meta name="description" content="">
 	<meta name="author" content="">
 	<title>Lector RSS</title>
@@ -77,100 +75,45 @@
 	<link href="css/heroic-features.css" rel="stylesheet">
 </head>
 
-<body style=" background-image: url('./public/assets/background.jpg'); background-attachment: fixed; ">
+<body 
+	style="background-image: url('./public/assets/background.jpg');
+		background-attachment: fixed;"
+>
 
-	<?php include("components/header.php") ?>
+	<!-- header -->
+	<?php include("components/Header.html") ?>
 
 	<!-- Page Content -->
 	<div class="container">
+		
+		<?php 
+			// Jumbotron Header
+			include("components/Jumbotron.html");
 
-		<!-- Jumbotron Header -->
-		<?php include("components/jumbotron.php") ?>
+			// Urls Input
+			include("components/UrlsInput.html"); 
+		
+			echo '<hr/>';
 
-		<!-- Urls Input -->
-		<div class="container">
-			<p class="text-center">
-				<strong>Ingresa la Url de donde desees recibir sus actualizaciones:</strong>
-			</p>
-			<form method='post' action='' class="input-group-append">
-				<div class="input-group mb-3">
-					<input 
-						type="text" 
-						name="RSSUrl" 
-						class="form-control"
-						placeholder="http://feeds.bbci.co.uk/news/world/rss.xml"
-					>
-					<input 
-						type="submit" 
-						name="submit" 
-						value="Ingresar"
-						class="btn btn-primary"
-					>
-				</div>
-			</form>
-		</div>
-
-		<hr/>
-
-		<!-- Search Input Words -->
-		<div class="container">
-			<form action="" method="post" class="input-group-append">
-				<div class="input-group mb-3">
-					<label 
-						class="col-sm-auto control-label" 
-						for=""
-					>
-						<strong><img src="./public/assets/search-icon.png"/> - Buscar noticias:</strong>
-					</label>
-					<input 
-						class="form-control" 
-						name="search"
-						placeholder="downtown"
-						type="text" 
-					>
-					<input 
-						class="btn btn-outline-primary" 
-						type="submit" 
-						value="Buscar"
-					>
-				</div>
-			</form>
-			<div class="container mb-3">
-				<form action="" method="post">
-					<label 
-						class="col-sm-auto control-label" 
-						for=""
-					>
-						<img src="./public/assets/sort-icon.png"/>
-						<strong> - Ordenar por:</strong>
-					</label>
-					<button class="btn btn-secondary" type="submit" name="byDate">Fecha</button>
-					<button class="btn btn-secondary" type="submit" name="byTitle">Título</button>
-					<button class="btn btn-secondary" type="submit" name="byUrl">URL</button>
-					<button class="btn btn-secondary" type="submit" name="byDescription">Descripción</button>
-				</form>
-			</div>
-		</div>
+			// Search
+			include("components/Search.html");
+		?>
 
 		<!-- Page Features -->
 		<div class="row text-center" id="ItemsContainer">
 
-			<?php
-				include("CargaBD.php");
-			?>
+			<?php include("CargaBD.php");?>
 
     	</div>
-		<!-- /.row -->
+
 	</div>
-	<!-- /.container -->
 
 	<!-- Footer -->
-	<?php include("components/footer.php") ?>
+	<?php include("components/Footer.html") ?>
 
 	<!-- Bootstrap core JavaScript -->
 	<script src="vendor/jquery/jquery.min.js"></script>
 	<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
 </body>
 
 </html>

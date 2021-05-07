@@ -1,0 +1,38 @@
+<div class="container">
+    <form action="" method="post" class="input-group-append">
+        <div class="input-group mb-3">
+            <label 
+                class="col-sm-auto control-label" 
+                for=""
+            >
+                <strong><img src="./public/assets/search-icon.png"/> - Buscar noticias:</strong>
+            </label>
+            <input 
+                class="form-control" 
+                name="search"
+                placeholder="downtown"
+                type="text" 
+            >
+            <input 
+                class="btn btn-outline-primary" 
+                type="submit" 
+                value="Buscar"
+            >
+        </div>
+    </form>
+    <div class="container mb-3">
+        <form action="" method="post">
+            <label 
+                class="col-sm-auto control-label" 
+                for=""
+            >
+                <img src="./public/assets/sort-icon.png"/>
+                <strong> - Ordenar por:</strong>
+            </label>
+            <button class="btn btn-secondary" type="submit" name="byDate">Fecha</button>
+            <button class="btn btn-secondary" type="submit" name="byTitle">Título</button>
+            <button class="btn btn-secondary" type="submit" name="byUrl">URL</button>
+            <button class="btn btn-secondary" type="submit" name="byDescription">Descripción</button>
+        </form>
+    </div>
+</div>

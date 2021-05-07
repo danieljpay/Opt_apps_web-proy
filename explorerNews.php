@@ -2,8 +2,8 @@
 <html lang="en">
 
 <?php 
-    include ("variables.php");
-    include ("funciones.php");
+    include("variables.php");
+    include("funciones.php");
 ?>
 
 <head>
@@ -20,13 +20,18 @@
     <!-- Custom styles for this template -->
     <link href="css/heroic-features.css" rel="stylesheet">
 </head>
-<body style=" background-image: url('./public/assets/background.jpg'); background-attachment: fixed; ">
+<body 
+    style="background-image: url('./public/assets/background.jpg');
+        background-attachment: fixed;"
+>
 
-    <?php include("components/header.php") ?>
+    <?php 
+        include("components/Header.html");
 
-    <?php echo generateNewsCardAccordion($servidor, $usuario, $contrasena, $basedatos, $queryByDate); ?>
+        echo generateNewsCardAccordion($servidor, $usuario, $contrasena, $basedatos, $queryByDate);
 
-    <?php include("components/footer.php") ?>
+        include("components/Footer.html");
+    ?>
 
     <!-- JavaScript Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js" integrity="sha384-SR1sx49pcuLnqZUnnPwx6FCym0wLsk5JZuNx2bPPENzswTNFaQU1RDvt3wT4gWFG" crossorigin="anonymous"></script>
