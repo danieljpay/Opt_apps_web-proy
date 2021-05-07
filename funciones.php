@@ -142,7 +142,9 @@
             $idCanalBusqueda = $registroItems[$counterCategoria]["IdCanal"];
             $NewSiteImg = GetChannelImage($idCanalBusqueda,$servidor, $usuario, $contrasena, $basedatos);
 
-            $sentenciaSQL = "SELECT NombreCategoria FROM categorizacion INNER JOIN categorias ON categorizacion.IdCategoria=categorias.IdCategoria WHERE categorizacion.IdNoticia=$idNoticiaBusqueda";
+            $sentenciaSQL = "SELECT NombreCategoria FROM categorizacion INNER JOIN categorias
+							ON categorizacion.IdCategoria=categorias.IdCategoria
+							WHERE categorizacion.IdNoticia=$idNoticiaBusqueda";
             $busquedaCategorias = ConsultarSQL($servidor, $usuario, $contrasena, $basedatos, $sentenciaSQL);
             
             $categoriasActuales = array();
@@ -185,7 +187,9 @@
 			$NewSiteImg = GetChannelImage($registroItems[$j]["IdCanal"], $servidor, $usuario, $contrasena, $basedatos);
             
 			$idNoticiaBusqueda = $registroItems[$j]["IdNoticia"];
-			$sentenciaSQL = "SELECT NombreCategoria FROM categorizacion INNER JOIN categorias ON categorizacion.IdCategoria=categorias.IdCategoria WHERE categorizacion.IdNoticia=$idNoticiaBusqueda";
+			$sentenciaSQL = "SELECT NombreCategoria FROM categorizacion INNER JOIN categorias
+							ON categorizacion.IdCategoria=categorias.IdCategoria
+							WHERE categorizacion.IdNoticia=$idNoticiaBusqueda";
             $categories = ConsultarSQL($servidor, $usuario, $contrasena, $basedatos, $sentenciaSQL);
 
 			$categoriasActuales = array();
@@ -226,33 +230,38 @@
 		$newsMatrix = getMatrixNewsByChannel ($servidor, $usuario, $contrasena, $basedatos, $sentenciaSQL);
 		$channels = ReadChannels ($servidor, $usuario, $contrasena, $basedatos);
 
-		$accordion = 
-		'<div class="container">' .
-        	'<div class="accordion" id="accordionExample">' .
-            	'<div class="accordion-item">' ;
-
+		$accordion = '<div class="container"> <div class="accordion" id="accordionExample">' .
+		'<div class="accordion-item">';
 
 		$generatedNewsCards = "";
 		for ($i=0; $i < count($channels) ; $i++) { 
 			$generatedNewsCards .= generateACardAccordion($channels[$i]["NombreCanal"], $newsMatrix[$i+1]);
 		}
 
-		$closeAccordion =
-                '</div>' .
-            '</div>' .
-		'</div>' ;
+		$closeAccordion = '</div> </div> </div>' ;
 
 		return $accordion . $generatedNewsCards . $closeAccordion;
 	}
 
 	function generateACardAccordion ($channelTitle, $newsArray) {
 		$accordion =
-		'<h2 class="accordion-header shadow-sm p-2 mb-2 bg-white rounded" id="heading' . $newsArray[0]["ChannelID"] . '">' .
-			'<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse' . $newsArray[0]["ChannelID"] . '" aria-expanded="false" aria-controls="collapse' . $newsArray[0]["ChannelID"] . '">' .
+		'<h2 class="accordion-header shadow-sm p-2 mb-2 bg-white rounded" id="heading' . 
+					$newsArray[0]["ChannelID"] . 
+		'">' .
+			'<button class="accordion-button" type="button" data-bs-toggle="collapse"' .
+					'data-bs-target="#collapse' . $newsArray[0]["ChannelID"] . 
+					'" aria-expanded="false" aria-controls="collapse' . 
+					$newsArray[0]["ChannelID"] . 
+			'">' .
 				$channelTitle .
 			'</button>' .
 		'</h2>' .
-		'<div id="collapse' . $newsArray[0]["ChannelID"] . '" class="accordion-collapse collapse" aria-labelledby="heading' . $newsArray[0]["ChannelID"] . '" data-bs-parent="#accordionExample">' .
+		'<div 
+			id="collapse' . $newsArray[0]["ChannelID"] . '"' . 
+			'class="accordion-collapse collapse"' .
+			'aria-labelledby="heading' . $newsArray[0]["ChannelID"] . '"' .
+			'data-bs-parent="#accordionExample"' . 
+		'>' .
 			'<div class="accordion-body">' .
 				'<div class="row">' .
 					'<div class="col-4">' . 
@@ -276,8 +285,12 @@
 		$titlePerOption = "";
 		foreach ($newsArray as $new) {
 			$titlePerOption .= 
-			'<a class="list-group-item list-group-item-action" id="list-' . $new["NewID"] . '-list" data-bs-toggle="list" href="#list-' . $new["NewID"] . '" role="tab" aria-controls="' . $new["NewID"] . '">' . 
-			$new["Title"] . 
+			'<a 
+				class="list-group-item list-group-item-action" id="list-' . $new["NewID"] . 
+				'-list" data-bs-toggle="list" href="#list-' . $new["NewID"] . 
+				'" role="tab" aria-controls="' . $new["NewID"] . 
+			'">' . 
+				$new["Title"] .
 			'</a>';
 		}
 		return $titlePerOption;
@@ -287,10 +300,13 @@
 		$infoPerOption = "";
 		foreach ($newsArray as $new) {
 			$infoPerOption .=
-			'<div class="tab-pane fade" id="list-' . $new["NewID"] . '" role="tabpanel" aria-labelledby="list-' . $new["NewID"] . '-list">' .
-			$new["Description"] .
-			'<br/>' .
-			'<a href="' . $new["Link"] . '" target="blank">' . $new["Link"] . '</a>' .
+			'<div 
+				class= "tab-pane fade" id="list-' . $new["NewID"] . 
+				'" role="tabpanel" aria-labelledby="list-' . $new["NewID"] . '-list' .
+			'">' .
+				$new["Description"] .
+				'<br/>' .
+				'<a href="' . $new["Link"] . '" target="blank">' . $new["Link"] . '</a>' .
 			'</div>';
 		}
 		return $infoPerOption;
