@@ -28,7 +28,7 @@
     <?php 
         include("components/Header.html");
 
-        echo generateNewsCardAccordion($servidor, $usuario, $contrasena, $basedatos, $queryByDate);
+        generateNewsCardAccordion($servidor, $usuario, $contrasena, $basedatos, $queryByDate);
 
         include("components/Footer.html");
     ?>

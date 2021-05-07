@@ -240,7 +240,7 @@
 
 		$closeAccordion = '</div> </div> </div>' ;
 
-		return $accordion . $generatedNewsCards . $closeAccordion;
+		echo $accordion . $generatedNewsCards . $closeAccordion;
 	}
 
 	function generateACardAccordion ($channelTitle, $newsArray) {
