@@ -21,7 +21,7 @@
     <link href="css/heroic-features.css" rel="stylesheet">
 </head>
 <body 
-    style="background-image: url('./public/assets/background.jpg');
+    style="background-image: url('./public/assets/background.png');
         background-attachment: fixed;"
 >
 

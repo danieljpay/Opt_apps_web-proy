@@ -76,7 +76,7 @@
 </head>
 
 <body 
-	style="background-image: url('./public/assets/background.jpg');
+	style="background-image: url('./public/assets/background.png');
 		background-attachment: fixed;"
 >
 
