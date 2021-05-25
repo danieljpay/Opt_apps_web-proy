@@ -206,6 +206,7 @@
                     // Se cargan nuevamente las noticias y categorias por si se agrego una nueva
                     $registroItems = ReadItems ($servidor, $usuario, $contrasena, $basedatos);
                     $contadorItems = count($registroItems);
+
                     $registroCategorias = ReadCategories ($servidor, $usuario, $contrasena, $basedatos);
                     $contadorCategorias = count($registroCategorias);
                     // Fin de recarga
@@ -247,7 +248,6 @@
                 $counter ++;
             }
         }
-        echo loadItemsFromDB($servidor, $usuario, $contrasena, $basedatos,
-                            $registroCanales, $contadorCanales, $queryByDate);
+        echo loadItemsFromDB($servidor, $usuario, $contrasena, $basedatos, $queryByDate);
     }
 ?>
