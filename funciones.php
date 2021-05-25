@@ -1,5 +1,4 @@
 <?php
-
 	function ReadChannels ($servidor, $usuario, $contrasena, $basedatos) {
 		$sentenciaSQL = "SELECT * FROM `canales`";
 		return ConsultarSQL($servidor, $usuario, $contrasena, $basedatos, $sentenciaSQL);
@@ -26,7 +25,6 @@
 	}
 
 	function LeerArchivoSELECT($seleccion) {
-		
 		$lineas = file("areas.txt", FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 		foreach ($lineas as $linea){
 			if (strtolower ($linea) == strtolower ($seleccion)){
@@ -35,36 +33,26 @@
 				echo "<option value=\"{$linea}\">{$linea}</option>\n";
 			}
 		}
-			
 	}
 
 	function EjecutarSQL ($servidor, $usuario, $contrasena, $basedatos, $sentenciaSQL) {
-
 		$conexion = mysqli_connect($servidor, $usuario, $contrasena, $basedatos);
 		if (!$conexion) {
 			die("Fallo: " . mysqli_connect_error());
 		}
-
 		$resultado = mysqli_query($conexion, $sentenciaSQL);
 		mysqli_close($conexion);
-
 	}
 
 	function ConsultarSQL ($servidor, $usuario, $contrasena, $basedatos, $sentenciaSQL) {
-
 		$conexion = mysqli_connect($servidor, $usuario, $contrasena, $basedatos);
 		if (!$conexion) {
 			die("Fallo: " . mysqli_connect_error());
 		}
-
 		$resultado = mysqli_query($conexion, $sentenciaSQL);
-		
 		for ($registros = array (); $fila = mysqli_fetch_assoc($resultado); $registros[] = $fila);	
-		
 		mysqli_close($conexion);
-		
 		return $registros;
-
 	}
 
 	function loadXML($RSSUrl) {
@@ -163,7 +151,6 @@
             array_push($itemsFoundGenerated, $currentItem);
             $counterCategoria++;
         }
-
         return generateAllItems($itemsFoundGenerated);
 	}
 
@@ -171,32 +158,26 @@
 	function getAllNewsFromDataBase ($servidor, $usuario, $contrasena, $basedatos, $sentenciaSQL) {
 		$registroItems = ConsultarSQL($servidor, $usuario, $contrasena, $basedatos, $sentenciaSQL);
         $contadorItems = count($registroItems);
-
         $registroCategorizacion = ReadCategorizacion ($servidor, $usuario, $contrasena, $basedatos);
         $contadorCategorizacion = count($registroCategorizacion);
         // Fin de recarga
         
-        // Crear los obejtos de notcias
+        // Crear los objetos de noticias
         $imagenItem = "";
         $arrayItems = array();
         $itemsFoundGenerated = array();
-
         for ($j = 0; $j < $contadorItems; $j ++) {
 			$arrayCategories = array("");
-
 			$NewSiteImg = GetChannelImage($registroItems[$j]["IdCanal"], $servidor, $usuario, $contrasena, $basedatos);
-            
 			$idNoticiaBusqueda = $registroItems[$j]["IdNoticia"];
 			$sentenciaSQL = "SELECT NombreCategoria FROM categorizacion INNER JOIN categorias
 							ON categorizacion.IdCategoria=categorias.IdCategoria
 							WHERE categorizacion.IdNoticia=$idNoticiaBusqueda";
             $categories = ConsultarSQL($servidor, $usuario, $contrasena, $basedatos, $sentenciaSQL);
-
 			$categoriasActuales = array();
             foreach ($categories as $categoria) {
                 array_push($categoriasActuales, $categoria["NombreCategoria"]);
             }
-          
 			$currentItem = array (
 				"Image" => $NewSiteImg,
 				"Title" => $registroItems[$j]["Titulo"],
@@ -207,7 +188,6 @@
 				"ChannelID" => $registroItems[$j]["IdCanal"],
 				"NewID" => $registroItems[$j]["IdNoticia"]
 			);
-
           	array_push($arrayItems, $currentItem);
         }
 		return $arrayItems;
@@ -215,31 +195,23 @@
 
 	function getMatrixNewsByChannel ($servidor, $usuario, $contrasena, $basedatos, $sentenciaSQL) {
 		$allNews = getAllNewsFromDataBase($servidor, $usuario, $contrasena, $basedatos, $sentenciaSQL);
-
-		//newsMatrixByChannel guarda todas las noticias ordenadamente
-		//Se accede con la estructura $newsMatrixByChannel[Canal][Noticia] 
-		$newsMatrixByChannel = array();
+		$newsMatrixByChannel = array();	//newsMatrixByChannel guarda todas las noticias ordenadamente
 		foreach ($allNews as $new) {
-			$newsMatrix[$new["ChannelID"]][] = $new;
+			$newsMatrix[$new["ChannelID"]][] = $new; //Se accede con la estructura $newsMatrixByChannel[Canal][Noticia] 
 		}
-
 		return $newsMatrix;
 	}
 
 	function generateNewsCardAccordion ($servidor, $usuario, $contrasena, $basedatos, $sentenciaSQL) {
 		$newsMatrix = getMatrixNewsByChannel ($servidor, $usuario, $contrasena, $basedatos, $sentenciaSQL);
 		$channels = ReadChannels ($servidor, $usuario, $contrasena, $basedatos);
-
 		$accordion = '<div class="container"> <div class="accordion" id="accordionExample">' .
 		'<div class="accordion-item">';
-
 		$generatedNewsCards = "";
 		for ($i=0; $i < count($channels) ; $i++) { 
 			$generatedNewsCards .= generateACardAccordion($channels[$i]["NombreCanal"], $newsMatrix[$i+1]);
 		}
-
-		$closeAccordion = '</div> </div> </div>' ;
-
+		$closeAccordion = '</div> </div> </div>';
 		echo $accordion . $generatedNewsCards . $closeAccordion;
 	}
 
@@ -277,7 +249,6 @@
 				'</div>' .
 			'</div>' .
 		'</div>';
-
 		return $accordion;
 	}
 
@@ -311,5 +282,4 @@
 		}
 		return $infoPerOption;
 	}
-	
 ?>
