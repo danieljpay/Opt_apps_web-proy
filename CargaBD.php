@@ -247,7 +247,7 @@
                 $counter ++;
             }
         }
-        echo loadItemsFromBD($servidor, $usuario, $contrasena, $basedatos,
+        echo loadItemsFromDB($servidor, $usuario, $contrasena, $basedatos,
                             $registroCanales, $contadorCanales, $queryByDate);
     }
 ?>
